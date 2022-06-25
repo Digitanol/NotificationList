@@ -6,8 +6,12 @@ export default function App() {
   return (
     <View style={styles.container}>
       <Text>hello Word </Text>
-    <Button title="deneem" ></Button>
+    
+    <Text>hello Word </Text>
+<Text>hello Word </Text>
       <StatusBar style="auto" />
+        <Text>hello Word </Text>
+        <Button title="deneem" ></Button>
     </View>
   );
 }
