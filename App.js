@@ -6,7 +6,6 @@ export default function App() {
   return (
     <View style={styles.container}>
       <Text>hello Word </Text>
-      <Text>hello Word 3</Text>
     
       <StatusBar style="auto" />
     </View>
