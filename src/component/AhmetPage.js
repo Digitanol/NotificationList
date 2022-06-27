@@ -5,7 +5,6 @@ const AhmetPage = () => {
   return (
     <View >
       <Text>AhmetPage</Text>
-      <Text>DFSFSDFS</Text>
     </View>
   )
 }
