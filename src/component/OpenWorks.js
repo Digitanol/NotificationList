@@ -1,6 +1,7 @@
 import React from "react";
 import { StyleSheet, Alert, Text, View, Image, TextInput ,TouchableOpacity,Dimensions} from "react-native";
 import {OpenWorksDummyData} from "../../data/data";
+import { ScrollView } from 'react-native-gesture-handler';
 
 const width = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;
@@ -14,44 +15,55 @@ const OpenWorks =(props) => {
           <View key={i} style={styles.container} >
           <TouchableOpacity 
             style={{
-                height:110,
+                height:130,
                 width:"95%",
                 flexDirection:"row",  
-                backgroundColor: OpenWorksDummyData[i].BildirimNo %2 ==0 ? "#3cb371" : "#f44336",
+                backgroundColor: OpenWorksDummyData[i].BildirimNo %1 ==0 ? "#FA7E5E" : "#FA7E5E",
                 borderTopRightRadius: 10,
                 borderTopLeftRadius: 10,
                 borderBottomRightRadius:10,
                 borderBottomLeftRadius:10,}} 
-                onPress={()=>navigation.navigate("tabs", {EkipmanTanimi: OpenWorksDummyData[i].EkipmanTanimi})} >
+                onPress={()=>navigation.navigate("tabs", {BildirimNo: OpenWorksDummyData[i].BildirimNo})} >
             <View style={styles.ViewStyle1} >
-              <Text style={{fontWeight:"bold", fontSize:20, color:"white"}}>
-              {OpenWorksDummyData[i].EkipmanTanimi}
+              <Text style={{fontWeight:"bold", fontSize:13, color:"black"}}>
+                BildirimNo:
               </Text>
+              <Text style={{fontWeight:"bold", fontSize:12, color:"white"}}>
+              {OpenWorksDummyData[i].BildirimNo}
+              </Text>
+                <Text style={{fontSize:13, fontWeight:"bold" , color:"black"}}>Bildiren:</Text>
+                <Text style={{fontSize:12, fontWeight:"bold", color:"white"}}>{OpenWorksDummyData[i].Bildiren}</Text>
             </View>
             <View style={styles.ViewStyle2}>
-              <Text style={{fontSize:12, fontWeight:"bold"}}>{OpenWorksDummyData[i].TeknikBirimTanimi}</Text>
-              <Text style={{fontSize:12, fontWeight:"200"}}>{OpenWorksDummyData[i].ArizaKodu} </Text>
-              <Text style={{fontSize:12, fontWeight:"200"}}>{OpenWorksDummyData[i].BildirimNo} </Text>
-            </View>
-            <View style={styles.ViewStyle1}>
               <View style={{flexDirection:"row"}}>
-                <Text style={{fontSize:12, fontWeight:"200"}}>{OpenWorksDummyData[i].ArizaKoduKisaAciklama}</Text>
+                <Text style={{fontSize:12, fontWeight:"bold"}}>Tenik Birim Tanımı: </Text>
+                <Text style={{fontSize:12, fontWeight:"bold",color:"white"}}>{OpenWorksDummyData[i].TeknikBirimTanimi}</Text>
               </View>
               <View style={{flexDirection:"row"}}>
-                <Text style={{fontSize:12, fontWeight:"200"}}>{OpenWorksDummyData[i].Bildiren}</Text>
+                <Text style={{fontSize:12, fontWeight:"bold"}}>Arıza Kodu: </Text>
+                <Text style={{fontSize:12, fontWeight:"bold",color:"white"}}>{OpenWorksDummyData[i].ArizaKodu} </Text>
               </View>
               <View style={{flexDirection:"row"}}>
-                <Text style={{fontSize:12, fontWeight:"200"}}>{OpenWorksDummyData[i].ArizaBaslangic}</Text>
+                <Text style={{fontSize:12, fontWeight:"bold"}}>Ekipman Tanımı: </Text>
+                <Text style={{fontSize:12, fontWeight:"bold",color:"white"}}>{OpenWorksDummyData[i].EkipmanTanimi} </Text>
               </View>
-            </View>         
+              <View style={{flexDirection:"row"}}>
+                <Text style={{fontSize:12, fontWeight:"bold"}}>Arıza Bildirim Açıklaması: </Text>
+                <Text style={{fontSize:12, fontWeight:"bold",color:"white"}}>{OpenWorksDummyData[i].ArizaKoduKisaAciklama}</Text>
+              </View>
+              <View style={{flexDirection:"row"}}>
+                <Text style={{fontSize:12, fontWeight:"bold"}}>Bildirim Tarihi: </Text>
+                <Text style={{fontSize:12, fontWeight:"bold",color:"white"}}>{OpenWorksDummyData[i].ArizaBaslangic}</Text>
+              </View>
+            </View>        
           </TouchableOpacity>
           </View>
         );
       }
     return(
-        <View>
+        <ScrollView>
             <Text>{dummydata}</Text>
-        </View>
+        </ScrollView>
     );
 }
 export default OpenWorks;
@@ -79,7 +91,6 @@ const styles = StyleSheet.create({
       justifyContent: "center",
     },
     ViewStyle2: {
-      paddingTop:10,
       width: "40%",
       height:"100%",
       flexDirection:"column",
