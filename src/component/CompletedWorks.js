@@ -6,7 +6,7 @@ const CompletedWorks =(props) => {
     const password=props.route.params.password;
     return(
         <View>
-            <Text>CompletedWorks Deneme1 {loginID}</Text>
+            <Text>CompletedWorks Deneme1 MUSTAFA {loginID}</Text>
         </View>
     );
 }
