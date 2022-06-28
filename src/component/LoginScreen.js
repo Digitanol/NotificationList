@@ -1,14 +1,19 @@
 
 import React, { useEffect, useState, useRef } from "react";
 import { StyleSheet, Alert, Text, View, Image, TextInput ,TouchableOpacity, AppState} from "react-native";
-
+import { StatusBar } from "expo-status-bar";
 const LoginScreen=({navigation}) => {
     const [loginID, setloginID] = useState("");
     const [password, setPassword] = useState("");
 
+    const loginButton = () => {
+     navigation.navigate("tabs", {loginID:loginID,password:password});
+    }
+
+
     return (
         <View style={styles.container}>
-          <Image style={styles.image} source={require("../assets/LOGO.png")} />
+          <Image style={styles.image} source={require("../../assets/LOGO.png")} />
           <StatusBar style="auto" />
           <View style={styles.inputView}>
             <TextInput
