@@ -9,6 +9,20 @@ const height = Dimensions.get('window').height;
 const OpenWorks =(props) => {
     const loginID=props.route.params.loginID;
     const password=props.route.params.password;
+    const takeOnTheJob = (param1,param2) =>{
+      Alert.alert(
+        "Emin Misiniz",
+        param1+" Numaralı işi üzerinize alıyosunuz!",
+        [
+          {
+            text: "Cancel",
+            onPress: () => console.log("Cancel Pressed"),
+            style: "cancel"
+          },
+          { text: "OK", onPress: () => console.log("OK Pressed") }
+        ]
+      );
+    };
     var dummydata=[];
     for (let i = 0; i < OpenWorksDummyData.length; i++){
         dummydata.push(
@@ -23,7 +37,7 @@ const OpenWorks =(props) => {
                 borderTopLeftRadius: 10,
                 borderBottomRightRadius:10,
                 borderBottomLeftRadius:10,}} 
-                onPress={()=>navigation.navigate("tabs", {BildirimNo: OpenWorksDummyData[i].BildirimNo})} >
+                onPress={()=>takeOnTheJob(OpenWorksDummyData[i].BildirimNo, OpenWorksDummyData[i].Bildiren)} >
             <View style={styles.ViewStyle1} >
               <Text style={{fontWeight:"bold", fontSize:13, color:"black"}}>
                 BildirimNo:
