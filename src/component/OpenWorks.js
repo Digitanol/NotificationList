@@ -43,7 +43,7 @@ const OpenWorks =(props) => {
                 BildirimNo:
               </Text>
               <Text style={{fontWeight:"bold", fontSize:12, color:"white"}}>
-              {OpenWorksDummyData[i].BildirimNo}
+                {OpenWorksDummyData[i].BildirimNo}
               </Text>
                 <Text style={{fontSize:13, fontWeight:"bold" , color:"black"}}>Bildiren:</Text>
                 <Text style={{fontSize:12, fontWeight:"bold", color:"white"}}>{OpenWorksDummyData[i].Bildiren}</Text>
@@ -95,7 +95,6 @@ const styles = StyleSheet.create({
       width:width,
       height:height,
       flexDirection:"column",
-      
     },
     ViewStyle1: {
       width: "30%",
