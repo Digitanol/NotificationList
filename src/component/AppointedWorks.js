@@ -1,14 +1,25 @@
-import React from "react";
-import { StyleSheet, Alert, Text, View, Image, TextInput ,TouchableOpacity, AppState,Dimensions} from "react-native";
+import React, {useState} from "react";
+import { StyleSheet, Alert, Text, View, Image, TextInput, TouchableOpacity, AppState, Dimensions, Modal} from "react-native";
 import {AppointedWorksDummyData} from "../../data/data";
 import { ScrollView } from 'react-native-gesture-handler';
 
 const width = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;
 
-const AppointedWorks =(props) => {
+const AppointedWorks = (props) => {
     const loginID=props.route.params.loginID;
     const password=props.route.params.password;
+    const [modalVisible, setModalVisible] = useState(false);
+
+    const startTheWork = (param) => {
+      if(param==loginID){
+        setModalVisible(true);
+      }
+      else{
+        
+      }
+    }
+
     var dummydata=[];
     for (let i = 0; i < AppointedWorksDummyData.length; i++){
         dummydata.push(
@@ -18,12 +29,12 @@ const AppointedWorks =(props) => {
                 height:130,
                 width:"95%",
                 flexDirection:"row",  
-                backgroundColor: loginID==AppointedWorksDummyData[i].TayinOlan "#4caf50",
+                backgroundColor: loginID==AppointedWorksDummyData[i].TayinOlan ? "#4caf50": "#f44336",
                 borderTopRightRadius: 10,
                 borderTopLeftRadius: 10,
                 borderBottomRightRadius:10,
                 borderBottomLeftRadius:10,}} 
-                onPress={()=>{}} >
+                onPress={()=>startTheWork(AppointedWorksDummyData[i].TayinOlan)} >
             <View style={styles.ViewStyle1} >
               <Text style={{fontWeight:"bold", fontSize:13, color:"black"}}>
                 BildirimNo:
@@ -65,9 +76,30 @@ const AppointedWorks =(props) => {
         );
       }
     return(
-        <ScrollView>
+      <ScrollView>
         <Text>{dummydata}</Text>
-    </ScrollView>
+        <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => {
+          Alert.alert("Modal has been closed.");
+          setModalVisible(!modalVisible);
+        }}
+      >
+        <View style={styles.centeredView}>
+          <View style={styles.modalView}>
+            <Text style={styles.modalText}>Hello World!</Text>
+            <TouchableOpacity
+              style={[styles.button, styles.buttonClose]}
+              onPress={() => setModalVisible(!modalVisible)}
+            >
+              <Text style={styles.textStyle}>Hide Modal</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
+      </ScrollView>
     );
 }
 export default AppointedWorks;
@@ -103,4 +135,47 @@ const styles = StyleSheet.create({
     image: {
     
     },
+    centeredView: {
+      flex: 1,
+      justifyContent: "center",
+      alignItems: "center",
+      marginTop: 22,
+    },
+    modalView: {
+      margin: 20,
+      backgroundColor: "white",
+      borderRadius: 20,
+      padding: 35,
+      alignItems: "center",
+      shadowColor: "#000",
+      shadowOffset: {
+        width: 0,
+        height: 2
+      },
+      shadowOpacity: 0.25,
+      shadowRadius: 4,
+      elevation: 5,
+      height:220,
+      width:220,
+    },
+    button: {
+      borderRadius: 20,
+      padding: 10,
+      elevation: 2
+    },
+    buttonOpen: {
+      backgroundColor: "#F194FF",
+    },
+    buttonClose: {
+      backgroundColor: "#2196F3",
+    },
+    textStyle: {
+      color: "white",
+      fontWeight: "bold",
+      textAlign: "center"
+    },
+    modalText: {
+      marginBottom: 15,
+      textAlign: "center"
+    }
 });
