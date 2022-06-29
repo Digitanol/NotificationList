@@ -10,6 +10,7 @@ const AppointedWorks = (props) => {
     const loginID=props.route.params.loginID;
     const password=props.route.params.password;
     const [modalCall, setModalCall] = useState(false);
+    const [modalCall2,setModalCall2]= useState(false);
     const [modalTayinOlan,setModalTayinOlan]=useState("");
     const [modalBildirimNo,setModalBildirimNo]=useState("");
 
@@ -20,7 +21,7 @@ const AppointedWorks = (props) => {
         setModalCall(true);
       }
       else{
-
+        setModalCall2(true);
       }
     }
     const takeOnTheJob = () => {
@@ -30,6 +31,40 @@ const AppointedWorks = (props) => {
     const handOverTheJob = () => {
       setModalCall(!modalCall);
       //işi devret transaction çalıştırılacak
+    }
+    const beAppointedToTheJob = () =>{
+      setModalCall2(!modalCall2);
+    }
+    const cancelTheJob = () => {
+      if(modalCall){
+        Alert.alert(
+          "Emin Misiniz",
+          modalBildirimNo + " No'lu İşlemi kapatmaya emin misiniz? ",
+          [
+            {
+              text: "Cancel",
+              onPress: () => setModalCall(modalCall),
+              style: "cancel"
+            },
+            { text: "OK", onPress: () => setModalCall(!modalCall)}
+          ]
+        );
+      }
+      else{
+        Alert.alert(
+          "Emin Misiniz",
+          modalBildirimNo + " No'lu İşlemi kapatmaya emin misiniz? ",
+          [
+            {
+              text: "Cancel",
+              onPress: () => setModalCall2(modalCall2),
+              style: "cancel"
+            },
+            { text: "OK", onPress: () => setModalCall2(!modalCall2)}
+          ]
+        );
+      }
+      
     }
     var dummydata=[];
     for (let i = 0; i < AppointedWorksDummyData.length; i++){
@@ -111,17 +146,109 @@ const AppointedWorks = (props) => {
               <View style={{padding:10}}>
                 <TouchableOpacity
                   style={[styles.button, styles.buttonClose]}
-                  onPress={() => takeOnTheJob()} //işi al buton
+                  onPress={() => {
+                    Alert.alert(
+                      "Emin Misiniz",
+                      modalBildirimNo + " No'lu İşi almaya emin misiniz? ",
+                      [
+                        {
+                          text: "Cancel",
+                          onPress: () => setModalCall(modalCall),
+                          style: "cancel"
+                        },
+                        { text: "OK", onPress: () => takeOnTheJob()}
+                      ]
+                    );
+                    
+                  }} //işi al buton
                 >
                   <Text style={styles.textStyle}>İşi Al</Text>
                 </TouchableOpacity>
               </View>
-              <View>
+              <View style={{padding:10}}>
                 <TouchableOpacity
                   style={[styles.button, styles.buttonClose]}
-                  onPress={() => handOverTheJob()} //işi devret buton
+                  onPress={() => {
+                    Alert.alert(
+                      "Emin Misiniz",
+                      modalBildirimNo + " No'lu İşi devretmeye emin misiniz? ",
+                      [
+                        {
+                          text: "Cancel",
+                          onPress: () => setModalCall(modalCall),
+                          style: "cancel"
+                        },
+                        { text: "OK", onPress: () => handOverTheJob()}
+                      ]
+                    );
+                    
+                  }} //işi devret buton
                 >
                   <Text style={styles.textStyle}>İşi Devret</Text>
+                </TouchableOpacity>
+              </View>
+              <View style={{padding:10}}>
+                <TouchableOpacity
+                 style={styles.cancel}
+                  onPress={() => cancelTheJob()} //işi devret buton
+                >
+                  <Text style={{...styles.textStyle, color:"black"}}>Cancel</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </View>
+        </Modal>
+        <Modal
+          animationType="slide"
+          transparent={true}
+          visible={modalCall2}
+          onRequestClose={() => {
+            Alert.alert(
+              "Emin Misiniz",
+              modalBildirimNo + " No'lu İşlemi kapatmaya emin misiniz? ",
+              [
+                {
+                  text: "Cancel",
+                  onPress: () => setModalCall2(modalCall2),
+                  style: "cancel"
+                },
+                { text: "OK", onPress: () => setModalCall2(!modalCall2)}
+              ]
+            );
+            
+          }}
+        >
+          <View style={styles.centeredView}>
+            <View style={styles.modalView}>
+              <Text style={styles.modalText}>{modalTayinOlan}-{modalBildirimNo}</Text>
+              <View style={{padding:10}}>
+                <TouchableOpacity
+                  style={[styles.button, styles.buttonClose]}
+                  onPress={() => {
+                    Alert.alert(
+                      "Emin Misiniz",
+                      modalBildirimNo + " No'lu İşe Tayin Olmaya emin misiniz? ",
+                      [
+                        {
+                          text: "Cancel",
+                          onPress: () => setModalCall2(modalCall2),
+                          style: "cancel"
+                        },
+                        { text: "OK", onPress: () => beAppointedToTheJob()}
+                      ]
+                    );
+                    
+                  }} //işi al buton
+                >
+                  <Text style={styles.textStyle}>Tayin Ol</Text>
+                </TouchableOpacity>
+              </View>
+              <View style={{padding:10}}>
+                <TouchableOpacity
+                 style={styles.cancel}
+                  onPress={() => cancelTheJob()} //işi devret buton
+                >
+                  <Text style={{...styles.textStyle, color:"black"}}>Cancel</Text>
                 </TouchableOpacity>
               </View>
             </View>
@@ -168,12 +295,12 @@ const styles = StyleSheet.create({
       justifyContent: "center",
       alignItems: "center",
       marginTop: 22,
+      backgroundColor:"transparent"
     },
     modalView: {
       margin: 10,
       backgroundColor: "#a0c7da",
       borderRadius: 20,
-      padding: 10,
       justifyContent:"center",
       alignItems: "center",
       shadowColor: "#000",
@@ -184,7 +311,7 @@ const styles = StyleSheet.create({
       shadowOpacity: 0.25,
       shadowRadius: 4,
       elevation: 5,
-      height:height/5,
+      height:height/3,
       width:width/2,
     },
     button: {
@@ -209,5 +336,12 @@ const styles = StyleSheet.create({
       textAlign: "center",
       fontWeight:"bold",
       color:"white"
+    },
+    cancel: {
+      borderRadius: 20,
+      padding: 10,
+      elevation: 2,
+      width:width/4,
+      backgroundColor:"white",
     }
 });
