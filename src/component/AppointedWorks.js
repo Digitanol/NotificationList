@@ -9,19 +9,28 @@ const height = Dimensions.get('window').height;
 const AppointedWorks = (props) => {
     const loginID=props.route.params.loginID;
     const password=props.route.params.password;
-    const [takeTheJob, setTakeTheJob] = useState(false);
+    const [modalCall, setModalCall] = useState(false);
     const [modalTayinOlan,setModalTayinOlan]=useState("");
+    const [modalBildirimNo,setModalBildirimNo]=useState("");
 
-    const startTheWork = (param) => {
-      setModalTayinOlan(param);
-      if(param==loginID){
-        setTakeTheJob(true);
+    const startTheWork = (TayinOlan,BildirimNo) => {
+      setModalTayinOlan(TayinOlan);
+      setModalBildirimNo(BildirimNo);
+      if(TayinOlan==loginID){
+        setModalCall(true);
       }
       else{
 
       }
     }
-
+    const takeOnTheJob = () => {
+      setModalCall(!modalCall);
+      //işi al transaction çalıştırılacak
+    }
+    const handOverTheJob = () => {
+      setModalCall(!modalCall);
+      //işi devret transaction çalıştırılacak
+    }
     var dummydata=[];
     for (let i = 0; i < AppointedWorksDummyData.length; i++){
         dummydata.push(
@@ -36,7 +45,7 @@ const AppointedWorks = (props) => {
                 borderTopLeftRadius: 10,
                 borderBottomRightRadius:10,
                 borderBottomLeftRadius:10,}} 
-                onPress={()=>startTheWork(AppointedWorksDummyData[i].TayinOlan)} >
+                onPress={()=>startTheWork(AppointedWorksDummyData[i].TayinOlan,AppointedWorksDummyData[i].BildirimNo)} >
             <View style={styles.ViewStyle1} >
               <Text style={{fontWeight:"bold", fontSize:13, color:"black"}}>BildirimNo:</Text>
               <Text style={{fontWeight:"bold", fontSize:12, color:"white"}}>{AppointedWorksDummyData[i].BildirimNo}</Text>
@@ -79,27 +88,42 @@ const AppointedWorks = (props) => {
         <Modal
           animationType="slide"
           transparent={true}
-          visible={takeTheJob}
+          visible={modalCall}
           onRequestClose={() => {
-            Alert.alert("Modal has been closed.");
-            setTakeTheJob(!takeTheJob);
+            Alert.alert(
+              "Emin Misiniz",
+              modalBildirimNo + " No'lu İşlemi kapatmaya emin misiniz? ",
+              [
+                {
+                  text: "Cancel",
+                  onPress: () => setModalCall(modalCall),
+                  style: "cancel"
+                },
+                { text: "OK", onPress: () => setModalCall(!modalCall)}
+              ]
+            );
+            
           }}
         >
           <View style={styles.centeredView}>
             <View style={styles.modalView}>
-              <Text style={styles.modalText}>{modalTayinOlan}</Text>
-              <TouchableOpacity
-                style={[styles.button, styles.buttonClose]}
-                onPress={() => setTakeTheJob(!takeTheJob)}
-              >
-                <Text style={styles.textStyle}>İşi Al</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={[styles.button, styles.buttonClose]}
-                onPress={() => setTakeTheJob(!takeTheJob)}
-              >
-                <Text style={styles.textStyle}>İşi Devret</Text>
-              </TouchableOpacity>
+              <Text style={styles.modalText}>{modalTayinOlan}-{modalBildirimNo}</Text>
+              <View style={{padding:10}}>
+                <TouchableOpacity
+                  style={[styles.button, styles.buttonClose]}
+                  onPress={() => takeOnTheJob()} //işi al buton
+                >
+                  <Text style={styles.textStyle}>İşi Al</Text>
+                </TouchableOpacity>
+              </View>
+              <View>
+                <TouchableOpacity
+                  style={[styles.button, styles.buttonClose]}
+                  onPress={() => handOverTheJob()} //işi devret buton
+                >
+                  <Text style={styles.textStyle}>İşi Devret</Text>
+                </TouchableOpacity>
+              </View>
             </View>
           </View>
         </Modal>
@@ -146,10 +170,11 @@ const styles = StyleSheet.create({
       marginTop: 22,
     },
     modalView: {
-      margin: 20,
-      backgroundColor: "white",
+      margin: 10,
+      backgroundColor: "#a0c7da",
       borderRadius: 20,
-      padding: 35,
+      padding: 10,
+      justifyContent:"center",
       alignItems: "center",
       shadowColor: "#000",
       shadowOffset: {
@@ -159,19 +184,20 @@ const styles = StyleSheet.create({
       shadowOpacity: 0.25,
       shadowRadius: 4,
       elevation: 5,
-      height:220,
-      width:220,
+      height:height/5,
+      width:width/2,
     },
     button: {
       borderRadius: 20,
       padding: 10,
-      elevation: 2
+      elevation: 2,
+      width:width/4
     },
     buttonOpen: {
-      backgroundColor: "#F194FF",
+      backgroundColor: "#418eb5",
     },
     buttonClose: {
-      backgroundColor: "#2196F3",
+      backgroundColor: "#1272a3",
     },
     textStyle: {
       color: "white",
@@ -180,6 +206,8 @@ const styles = StyleSheet.create({
     },
     modalText: {
       marginBottom: 15,
-      textAlign: "center"
+      textAlign: "center",
+      fontWeight:"bold",
+      color:"white"
     }
 });
