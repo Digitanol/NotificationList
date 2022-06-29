@@ -9,14 +9,16 @@ const height = Dimensions.get('window').height;
 const AppointedWorks = (props) => {
     const loginID=props.route.params.loginID;
     const password=props.route.params.password;
-    const [modalVisible, setModalVisible] = useState(false);
+    const [takeTheJob, setTakeTheJob] = useState(false);
+    const [modalTayinOlan,setModalTayinOlan]=useState("");
 
     const startTheWork = (param) => {
+      setModalTayinOlan(param);
       if(param==loginID){
-        setModalVisible(true);
+        setTakeTheJob(true);
       }
       else{
-        
+
       }
     }
 
@@ -36,14 +38,10 @@ const AppointedWorks = (props) => {
                 borderBottomLeftRadius:10,}} 
                 onPress={()=>startTheWork(AppointedWorksDummyData[i].TayinOlan)} >
             <View style={styles.ViewStyle1} >
-              <Text style={{fontWeight:"bold", fontSize:13, color:"black"}}>
-                BildirimNo:
-              </Text>
-              <Text style={{fontWeight:"bold", fontSize:12, color:"white"}}>
-                {AppointedWorksDummyData[i].BildirimNo}
-              </Text>
-                <Text style={{fontSize:13, fontWeight:"bold" , color:"black"}}>Tayin Olan:</Text>
-                <Text style={{fontSize:12, fontWeight:"bold", color:"white"}}>{AppointedWorksDummyData[i].TayinOlan}</Text>
+              <Text style={{fontWeight:"bold", fontSize:13, color:"black"}}>BildirimNo:</Text>
+              <Text style={{fontWeight:"bold", fontSize:12, color:"white"}}>{AppointedWorksDummyData[i].BildirimNo}</Text>
+              <Text style={{fontSize:13, fontWeight:"bold" , color:"black"}}>Tayin Olan:</Text>
+              <Text style={{fontSize:12, fontWeight:"bold", color:"white"}}>{AppointedWorksDummyData[i].TayinOlan}</Text>
             </View>
             <View style={styles.ViewStyle2}>
               <View style={{flexDirection:"row"}}>
@@ -67,7 +65,7 @@ const AppointedWorks = (props) => {
                 <Text style={{fontSize:12, fontWeight:"bold",color:"white"}}>{AppointedWorksDummyData[i].ArizaBaslangic}</Text>
               </View>
               <View style={{flexDirection:"row"}}>
-                <Text style={{fontSize:12, fontWeight:"bold" , color:"black"}}>Bildiren:</Text>
+                <Text style={{fontSize:12, fontWeight:"bold" , color:"black"}}>Bildiren: </Text>
                 <Text style={{fontSize:12, fontWeight:"bold", color:"white"}}>{AppointedWorksDummyData[i].Bildiren}</Text>
               </View> 
             </View>        
@@ -79,26 +77,32 @@ const AppointedWorks = (props) => {
       <ScrollView>
         <Text>{dummydata}</Text>
         <Modal
-        animationType="slide"
-        transparent={true}
-        visible={modalVisible}
-        onRequestClose={() => {
-          Alert.alert("Modal has been closed.");
-          setModalVisible(!modalVisible);
-        }}
-      >
-        <View style={styles.centeredView}>
-          <View style={styles.modalView}>
-            <Text style={styles.modalText}>Hello World!</Text>
-            <TouchableOpacity
-              style={[styles.button, styles.buttonClose]}
-              onPress={() => setModalVisible(!modalVisible)}
-            >
-              <Text style={styles.textStyle}>Hide Modal</Text>
-            </TouchableOpacity>
+          animationType="slide"
+          transparent={true}
+          visible={takeTheJob}
+          onRequestClose={() => {
+            Alert.alert("Modal has been closed.");
+            setTakeTheJob(!takeTheJob);
+          }}
+        >
+          <View style={styles.centeredView}>
+            <View style={styles.modalView}>
+              <Text style={styles.modalText}>{modalTayinOlan}</Text>
+              <TouchableOpacity
+                style={[styles.button, styles.buttonClose]}
+                onPress={() => setTakeTheJob(!takeTheJob)}
+              >
+                <Text style={styles.textStyle}>İşi Al</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={[styles.button, styles.buttonClose]}
+                onPress={() => setTakeTheJob(!takeTheJob)}
+              >
+                <Text style={styles.textStyle}>İşi Devret</Text>
+              </TouchableOpacity>
+            </View>
           </View>
-        </View>
-      </Modal>
+        </Modal>
       </ScrollView>
     );
 }
