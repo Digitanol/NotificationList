@@ -33,7 +33,7 @@ const Tabs = ({ route })=> {
             options = {{
             tabBarIcon:({focused}) =>(
                 <View alignItems = 'center'>
-                    <AntIcon name="tool" color="#d04137" size={30} 
+                    <AntIcon name="tool" color="#d07737" size={30} 
                             style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}  />
                     <Text style={{color: focused ?'#e32f45' : '#748c94', fontSize:12}} >
                     Açık İşler
@@ -46,7 +46,7 @@ const Tabs = ({ route })=> {
              options = {{
                 tabBarIcon:({focused}) =>(
                     <View alignItems = 'center'>
-                        <MaterialCommunityIcons name="tools" color="#d07737" size={25} 
+                        <MaterialCommunityIcons name="tools" color="#d04137" size={25} 
                                 style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}  />
                         <Text style={{color: focused ?'#e32f45' : '#748c94', fontSize:12}} >
                         Tayinli İşler
@@ -59,7 +59,7 @@ const Tabs = ({ route })=> {
             options = {{
                 tabBarIcon:({focused}) =>(
                     <View alignItems = 'center'>
-                        <MaterialCommunityIcons name="calendar-start" color="#376dd0" size={25} 
+                        <MaterialCommunityIcons name="calendar-start" color="#71aac8" size={25} 
                                 style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}  />
                         <Text style={{color: focused ?'#e32f45' : '#748c94', fontSize:12}} >
                         Başlanan İşler

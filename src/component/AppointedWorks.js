@@ -3,7 +3,8 @@ import { StyleSheet, Alert, Text, View, Image, TextInput, TouchableOpacity, AppS
 import {AppointedWorksDummyData} from "../../data/data";
 import { ScrollView } from 'react-native-gesture-handler';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import MaterialIcons from "react-native-vector-icons/MaterialIcons"
+import MaterialIcons from "react-native-vector-icons/MaterialIcons";
+
 const width = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;
 
@@ -184,7 +185,7 @@ const AppointedWorks = (props) => {
                       ]
                     );
                     
-                  }} //işi devret buton
+                  }} //işi devret buton alert
                 >
                   <MaterialCommunityIcons name="handshake" color="white" size={25} />
                   <Text style={styles.textStyle}>İşi Devret</Text>
