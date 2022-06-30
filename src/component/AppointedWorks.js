@@ -2,7 +2,8 @@ import React, {useState} from "react";
 import { StyleSheet, Alert, Text, View, Image, TextInput, TouchableOpacity, AppState, Dimensions, Modal} from "react-native";
 import {AppointedWorksDummyData} from "../../data/data";
 import { ScrollView } from 'react-native-gesture-handler';
-
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import MaterialIcons from "react-native-vector-icons/MaterialIcons"
 const width = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;
 
@@ -162,6 +163,7 @@ const AppointedWorks = (props) => {
                     
                   }} //işi al buton
                 >
+                  <MaterialCommunityIcons name="arm-flex" color="white" size={25}/>
                   <Text style={styles.textStyle}>İşi Al</Text>
                 </TouchableOpacity>
               </View>
@@ -184,6 +186,7 @@ const AppointedWorks = (props) => {
                     
                   }} //işi devret buton
                 >
+                  <MaterialCommunityIcons name="handshake" color="white" size={25} />
                   <Text style={styles.textStyle}>İşi Devret</Text>
                 </TouchableOpacity>
               </View>
@@ -240,6 +243,7 @@ const AppointedWorks = (props) => {
                     
                   }} //işi al buton
                 >
+                  <MaterialIcons name="assignment" color="white" size={25}/>
                   <Text style={styles.textStyle}>Tayin Ol</Text>
                 </TouchableOpacity>
               </View>
@@ -316,9 +320,12 @@ const styles = StyleSheet.create({
     },
     button: {
       borderRadius: 20,
-      padding: 10,
+      padding:10,
       elevation: 2,
-      width:width/4
+      width:width/4,
+      flexDirection:"row",
+      justifyContent:"center",
+      alignItems:"center",
     },
     buttonOpen: {
       backgroundColor: "#418eb5",
@@ -330,6 +337,7 @@ const styles = StyleSheet.create({
       color: "white",
       fontWeight: "bold",
       textAlign: "center"
+
     },
     modalText: {
       marginBottom: 15,
