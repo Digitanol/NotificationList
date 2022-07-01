@@ -41,12 +41,14 @@ const StartedWorks =(props) => {
     }
     const consumeMaterial = () => {
     setModalCall(!modalCall);
-    //işi devret transaction çalıştırılacak
+    //Malzeme Tüket transaction çalıştırılacak
     }
     const completeTheJob = () => {
     setModalCall(!modalCall);
+    //İşi Tamamla Transaction Çalıştırılacak
     }
     const cancelTheJob = () => {
+        //Cancel Butonu
         Alert.alert(
             "Emin Misiniz",
             modalBildirimNo + " No'lu İşlemi kapatmaya emin misiniz? ",
@@ -157,7 +159,7 @@ const StartedWorks =(props) => {
                             
                         }} //Ara Ver
                         >
-                        <MaterialCommunityIcons name="arm-flex" color="white" size={25}/>
+                        <MaterialCommunityIcons name="cog-pause" color="white" size={25}/>
                         <Text style={styles.textStyle}>Ara Ver</Text>
                         </TouchableOpacity>
                     </View>
@@ -180,7 +182,7 @@ const StartedWorks =(props) => {
                             
                         }} //işi Bitir
                         >
-                        <MaterialCommunityIcons name="handshake" color="white" size={25} />
+                        <MaterialCommunityIcons name="calendar-check" color="white" size={25} />
                         <Text style={styles.textStyle}>İşi Bitir</Text>
                         </TouchableOpacity>
                     </View>
@@ -203,7 +205,7 @@ const StartedWorks =(props) => {
                             
                         }} //Malzeme Tüket
                         >
-                        <MaterialCommunityIcons name="handshake" color="white" size={25} />
+                        <MaterialCommunityIcons name="beaker-minus" color="white" size={25} />
                         <Text style={styles.textStyle}>Malzeme Tüket</Text>
                         </TouchableOpacity>
                     </View>
