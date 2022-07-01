@@ -9,10 +9,10 @@ const height = Dimensions.get('window').height;
 const OpenWorks =(props) => {
     const loginID=props.route.params.loginID;
     const password=props.route.params.password;
-    const takeOnTheJob = (param1,param2) =>{
+    const takeOnTheJob = (BildirimNo,Bildiren) =>{
       Alert.alert(
         "Emin Misiniz",
-        param1+" Numaralı işi üzerinize alıyosunuz!",
+        BildirimNo+" Numaralı işi üzerinize alıyosunuz!",
         [
           {
             text: "Cancel",
