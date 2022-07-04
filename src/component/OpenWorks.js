@@ -1,14 +1,15 @@
-import React from "react";
+import React, {useState} from "react";
 import { StyleSheet, Alert, Text, View, Image, TextInput ,TouchableOpacity,Dimensions} from "react-native";
 import {OpenWorksDummyData} from "../../data/data";
 import { ScrollView } from 'react-native-gesture-handler';
-
+import { SearchBar } from "react-native-elements";
 const width = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;
 
 const OpenWorks =(props) => {
     const loginID=props.route.params.loginID;
     const password=props.route.params.password;
+    const [search,setSearch]=useState("");
     const takeOnTheJob = (BildirimNo,Bildiren) =>{
       Alert.alert(
         "Emin Misiniz",
@@ -23,6 +24,10 @@ const OpenWorks =(props) => {
         ]
       );
     };
+    const onSearch = (search) =>{
+      setSearch(search);
+      
+    }
     var dummydata=[];
     for (let i = 0; i < OpenWorksDummyData.length; i++){
         dummydata.push(
@@ -75,9 +80,19 @@ const OpenWorks =(props) => {
         );
       }
     return(
+      <View>
+        <SearchBar
+          style={{color:"red"}}
+          containerStyle={{}}
+          platform="android"
+          placeholder="Type Here..."
+          onChangeText={(search) =>onSearch(search)}
+          value={search}
+        />
         <ScrollView>
-            <Text>{dummydata}</Text>
+          <Text>{dummydata}</Text>
         </ScrollView>
+      </View>
     );
 }
 export default OpenWorks;

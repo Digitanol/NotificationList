@@ -1,7 +1,8 @@
-import React from "react";
+import React, {useState} from "react";
 import { StyleSheet, Alert, Text, View, Image, TextInput ,TouchableOpacity, Dimensions} from "react-native";
 import { ScrollView } from 'react-native-gesture-handler';
 import {CompletedWorksDummyData} from "../../data/data";
+import { SearchBar } from "react-native-elements";
 
 const width = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;
@@ -9,7 +10,12 @@ const height = Dimensions.get('window').height;
 const CompletedWorks =(props) => {
     const loginID=props.route.params.loginID;
     const password=props.route.params.password;
+    const [search,setSearch]=useState("");
 
+    const onSearch = (search) =>{
+      setSearch(search);
+      //search field
+    }
     var dummydata=[];
     for (let i = 0; i < CompletedWorksDummyData.length; i++){
         dummydata.push(
@@ -66,9 +72,20 @@ const CompletedWorks =(props) => {
         );
       }
     return(
+      <View>
+        <SearchBar
+          style={{color:"red"}}
+          containerStyle={{}}
+          platform="android"
+          placeholder="Type Here..."
+          onChangeText={(search) =>onSearch(search)}
+          value={search}
+        />
         <ScrollView>
-            <Text>{dummydata}</Text>
+          <Text>{dummydata}</Text>
         </ScrollView>
+      </View>
+        
     );
 }
 export default CompletedWorks;

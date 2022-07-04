@@ -4,6 +4,7 @@ import {StartedWorksDummyData} from "../../data/data";
 import { ScrollView } from 'react-native-gesture-handler';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
+import { SearchBar } from "react-native-elements";
 
 const width = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;
@@ -14,7 +15,7 @@ const StartedWorks =(props) => {
     const [modalCall, setModalCall] = useState(false);
     const [modalSAPKullanici,setModalSAPKullanici]=useState("");
     const [modalBildirimNo,setModalBildirimNo]=useState("");
-
+    const [search,setSearch]=useState("");
     const onPressStartedWorks = (SAPKullanici,BildirimNo) =>{
         setModalSAPKullanici(SAPKullanici);
         setModalBildirimNo(BildirimNo);
@@ -61,6 +62,10 @@ const StartedWorks =(props) => {
                 { text: "OK", onPress: () => setModalCall(!modalCall)}
             ]
             );
+    }
+    const onSearch = (search) =>{
+      setSearch(search);
+      //arama butonu
     }
 
     var dummydata=[];
@@ -115,135 +120,145 @@ const StartedWorks =(props) => {
         );
       }
     return(
+      <View>
+        <SearchBar
+              style={{color:"red"}}
+              containerStyle={{}}
+              platform="android"
+              placeholder="Type Here..."
+              onChangeText={(search) =>onSearch(search)}
+              value={search}
+        />
         <ScrollView>
-            <Text>{dummydata}</Text>
-            <Modal
-                animationType="slide"
-                transparent={true}
-                visible={modalCall}
-                onRequestClose={() => {
-                    Alert.alert(
-                    "Emin Misiniz",
-                    modalBildirimNo + " No'lu İşlemi kapatmaya emin misiniz? ",
-                    [
-                        {
-                        text: "Cancel",
-                        onPress: () => setModalCall(modalCall),
-                        style: "cancel"
-                        },
-                        { text: "OK", onPress: () => setModalCall(!modalCall)}
-                    ]
-                    );
-                    
-                }}
-                >
-                <View style={styles.centeredView}>
-                    <View style={styles.modalView}>
-                    <Text style={styles.modalText}>{modalSAPKullanici}-{modalBildirimNo}</Text>
-                    <View style={{padding:10}}>
-                        <TouchableOpacity
-                        style={[styles.button, styles.buttonClose]}
-                        onPress={() => {
-                            Alert.alert(
-                            "Emin Misiniz",
-                            modalBildirimNo + " No'lu İş için ara vermeye emin misiniz? ",
-                            [
-                                {
-                                text: "Cancel",
-                                onPress: () => setModalCall(modalCall),
-                                style: "cancel"
-                                },
-                                { text: "OK", onPress: () => takeABreak()}
-                            ]
-                            );
-                            
-                        }} //Ara Ver
-                        >
-                        <MaterialCommunityIcons name="cog-pause" color="white" size={25}/>
-                        <Text style={styles.textStyle}>Ara Ver</Text>
-                        </TouchableOpacity>
-                    </View>
-                    <View style={{padding:10}}>
-                        <TouchableOpacity
-                        style={[styles.button, styles.buttonClose]}
-                        onPress={() => {
-                            Alert.alert(
-                            "Emin Misiniz",
-                            modalBildirimNo + " No'lu İşi bitirmeye emin misiniz? ",
-                            [
-                                {
-                                text: "Cancel",
-                                onPress: () => setModalCall(modalCall),
-                                style: "cancel"
-                                },
-                                { text: "OK", onPress: () => finishTheJob()}
-                            ]
-                            );
-                            
-                        }} //işi Bitir
-                        >
-                        <MaterialCommunityIcons name="calendar-check" color="white" size={25} />
-                        <Text style={styles.textStyle}>İşi Bitir</Text>
-                        </TouchableOpacity>
-                    </View>
-                    <View style={{padding:10}}>
-                        <TouchableOpacity
-                        style={[styles.button, styles.buttonClose]}
-                        onPress={() => {
-                            Alert.alert(
-                            "Emin Misiniz",
-                            modalBildirimNo + " No'lu İşi bitirmeye emin misiniz? ",
-                            [
-                                {
-                                text: "Cancel",
-                                onPress: () => setModalCall(modalCall),
-                                style: "cancel"
-                                },
-                                { text: "OK", onPress: () => consumeMaterial()}
-                            ]
-                            );
-                            
-                        }} //Malzeme Tüket
-                        >
-                        <MaterialCommunityIcons name="beaker-minus" color="white" size={25} />
-                        <Text style={styles.textStyle}>Malzeme Tüket</Text>
-                        </TouchableOpacity>
-                    </View>
-                    <View style={{padding:10}}>
-                        <TouchableOpacity
-                        style={[styles.button, styles.buttonClose]}
-                        onPress={() => {
-                            Alert.alert(
-                            "Emin Misiniz",
-                            modalBildirimNo + " No'lu İşi bitirmeye emin misiniz? ",
-                            [
-                                {
-                                text: "Cancel",
-                                onPress: () => setModalCall(modalCall),
-                                style: "cancel"
-                                },
-                                { text: "OK", onPress: () => completeTheJob()}
-                            ]
-                            );
-                            
-                        }} //İşi Tamamla
-                        >
-                        <MaterialCommunityIcons name="handshake" color="white" size={25} />
-                        <Text style={styles.textStyle}>İşi Tamamla</Text>
-                        </TouchableOpacity>
-                    </View>
-                    <View style={{padding:10}}>
-                        <TouchableOpacity
-                        style={styles.cancel}
-                        onPress={() => cancelTheJob()} //işi devret buton
-                        >
-                        <Text style={{...styles.textStyle, color:"black"}}>Cancel</Text>
-                        </TouchableOpacity>
-                    </View>
-                    </View>
-                </View>
-            </Modal>
+          <Text>{dummydata}</Text>
+          <Modal
+              animationType="slide"
+              transparent={true}
+              visible={modalCall}
+              onRequestClose={() => {
+                  Alert.alert(
+                  "Emin Misiniz",
+                  modalBildirimNo + " No'lu İşlemi kapatmaya emin misiniz? ",
+                  [
+                      {
+                      text: "Cancel",
+                      onPress: () => setModalCall(modalCall),
+                      style: "cancel"
+                      },
+                      { text: "OK", onPress: () => setModalCall(!modalCall)}
+                  ]
+                  );
+                  
+              }}
+              >
+              <View style={styles.centeredView}>
+                  <View style={styles.modalView}>
+                  <Text style={styles.modalText}>{modalSAPKullanici}-{modalBildirimNo}</Text>
+                  <View style={{padding:10}}>
+                      <TouchableOpacity
+                      style={[styles.button, styles.buttonClose]}
+                      onPress={() => {
+                          Alert.alert(
+                          "Emin Misiniz",
+                          modalBildirimNo + " No'lu İş için ara vermeye emin misiniz? ",
+                          [
+                              {
+                              text: "Cancel",
+                              onPress: () => setModalCall(modalCall),
+                              style: "cancel"
+                              },
+                              { text: "OK", onPress: () => takeABreak()}
+                          ]
+                          );
+                          
+                      }} //Ara Ver
+                      >
+                      <MaterialCommunityIcons name="cog-pause" color="white" size={25}/>
+                      <Text style={styles.textStyle}>Ara Ver</Text>
+                      </TouchableOpacity>
+                  </View>
+                  <View style={{padding:10}}>
+                      <TouchableOpacity
+                      style={[styles.button, styles.buttonClose]}
+                      onPress={() => {
+                          Alert.alert(
+                          "Emin Misiniz",
+                          modalBildirimNo + " No'lu İşi bitirmeye emin misiniz? ",
+                          [
+                              {
+                              text: "Cancel",
+                              onPress: () => setModalCall(modalCall),
+                              style: "cancel"
+                              },
+                              { text: "OK", onPress: () => finishTheJob()}
+                          ]
+                          );
+                          
+                      }} //işi Bitir
+                      >
+                      <MaterialCommunityIcons name="calendar-check" color="white" size={25} />
+                      <Text style={styles.textStyle}>İşi Bitir</Text>
+                      </TouchableOpacity>
+                  </View>
+                  <View style={{padding:10}}>
+                      <TouchableOpacity
+                      style={[styles.button, styles.buttonClose]}
+                      onPress={() => {
+                          Alert.alert(
+                          "Emin Misiniz",
+                          modalBildirimNo + " No'lu İşi bitirmeye emin misiniz? ",
+                          [
+                              {
+                              text: "Cancel",
+                              onPress: () => setModalCall(modalCall),
+                              style: "cancel"
+                              },
+                              { text: "OK", onPress: () => consumeMaterial()}
+                          ]
+                          );
+                          
+                      }} //Malzeme Tüket
+                      >
+                      <MaterialCommunityIcons name="beaker-minus" color="white" size={25} />
+                      <Text style={styles.textStyle}>Malzeme Tüket</Text>
+                      </TouchableOpacity>
+                  </View>
+                  <View style={{padding:10}}>
+                      <TouchableOpacity
+                      style={[styles.button, styles.buttonClose]}
+                      onPress={() => {
+                          Alert.alert(
+                          "Emin Misiniz",
+                          modalBildirimNo + " No'lu İşi bitirmeye emin misiniz? ",
+                          [
+                              {
+                              text: "Cancel",
+                              onPress: () => setModalCall(modalCall),
+                              style: "cancel"
+                              },
+                              { text: "OK", onPress: () => completeTheJob()}
+                          ]
+                          );
+                          
+                      }} //İşi Tamamla
+                      >
+                      <MaterialCommunityIcons name="handshake" color="white" size={25} />
+                      <Text style={styles.textStyle}>İşi Tamamla</Text>
+                      </TouchableOpacity>
+                  </View>
+                  <View style={{padding:10}}>
+                      <TouchableOpacity
+                      style={styles.cancel}
+                      onPress={() => cancelTheJob()} //işi devret buton
+                      >
+                      <Text style={{...styles.textStyle, color:"black"}}>Cancel</Text>
+                      </TouchableOpacity>
+                  </View>
+                  </View>
+              </View>
+          </Modal>
         </ScrollView>
+      </View>
     );
 }
 export default StartedWorks;

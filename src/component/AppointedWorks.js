@@ -4,6 +4,7 @@ import {AppointedWorksDummyData} from "../../data/data";
 import { ScrollView } from 'react-native-gesture-handler';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
+import { SearchBar } from "react-native-elements";
 
 const width = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;
@@ -15,6 +16,7 @@ const AppointedWorks = (props) => {
     const [modalCall2,setModalCall2]= useState(false);
     const [modalTayinOlan,setModalTayinOlan]=useState("");
     const [modalBildirimNo,setModalBildirimNo]=useState("");
+    const [search,setSearch]=useState("");
 
     const startTheWork = (TayinOlan,BildirimNo) => {
       setModalTayinOlan(TayinOlan);
@@ -68,6 +70,10 @@ const AppointedWorks = (props) => {
       }
       
     }
+    const onSearch = (search) =>{
+      setSearch(search);
+      //arama
+    }
     var dummydata=[];
     for (let i = 0; i < AppointedWorksDummyData.length; i++){
         dummydata.push(
@@ -120,146 +126,156 @@ const AppointedWorks = (props) => {
         );
       }
     return(
-      <ScrollView>
-        <Text>{dummydata}</Text>
-        <Modal
-          animationType="slide"
-          transparent={true}
-          visible={modalCall}
-          onRequestClose={() => {
-            Alert.alert(
-              "Emin Misiniz",
-              modalBildirimNo + " No'lu İşlemi kapatmaya emin misiniz? ",
-              [
-                {
-                  text: "Cancel",
-                  onPress: () => setModalCall(modalCall),
-                  style: "cancel"
-                },
-                { text: "OK", onPress: () => setModalCall(!modalCall)}
-              ]
-            );
-            
-          }}
-        >
-          <View style={styles.centeredView}>
-            <View style={styles.modalView}>
-              <Text style={styles.modalText}>{modalTayinOlan}-{modalBildirimNo}</Text>
-              <View style={{padding:10}}>
-                <TouchableOpacity
-                  style={[styles.button, styles.buttonClose]}
-                  onPress={() => {
-                    Alert.alert(
-                      "Emin Misiniz",
-                      modalBildirimNo + " No'lu İşi almaya emin misiniz? ",
-                      [
-                        {
-                          text: "Cancel",
-                          onPress: () => setModalCall(modalCall),
-                          style: "cancel"
-                        },
-                        { text: "OK", onPress: () => takeOnTheJob()}
-                      ]
-                    );
-                    
-                  }} //işi al buton
-                >
-                  <MaterialCommunityIcons name="arm-flex" color="white" size={25}/>
-                  <Text style={styles.textStyle}>İşi Al</Text>
-                </TouchableOpacity>
-              </View>
-              <View style={{padding:10}}>
-                <TouchableOpacity
-                  style={[styles.button, styles.buttonClose]}
-                  onPress={() => {
-                    Alert.alert(
-                      "Emin Misiniz",
-                      modalBildirimNo + " No'lu İşi devretmeye emin misiniz? ",
-                      [
-                        {
-                          text: "Cancel",
-                          onPress: () => setModalCall(modalCall),
-                          style: "cancel"
-                        },
-                        { text: "OK", onPress: () => handOverTheJob()}
-                      ]
-                    );
-                    
-                  }} //işi devret buton alert
-                >
-                  <MaterialCommunityIcons name="handshake" color="white" size={25} />
-                  <Text style={styles.textStyle}>İşi Devret</Text>
-                </TouchableOpacity>
-              </View>
-              <View style={{padding:10}}>
-                <TouchableOpacity
-                 style={styles.cancel}
-                  onPress={() => cancelTheJob()} //işi devret buton
-                >
-                  <Text style={{...styles.textStyle, color:"black"}}>Cancel</Text>
-                </TouchableOpacity>
-              </View>
-            </View>
-          </View>
-        </Modal>
-        <Modal
-          animationType="slide"
-          transparent={true}
-          visible={modalCall2}
-          onRequestClose={() => {
-            Alert.alert(
-              "Emin Misiniz",
-              modalBildirimNo + " No'lu İşlemi kapatmaya emin misiniz? ",
-              [
-                {
-                  text: "Cancel",
-                  onPress: () => setModalCall2(modalCall2),
-                  style: "cancel"
-                },
-                { text: "OK", onPress: () => setModalCall2(!modalCall2)}
-              ]
-            );
-            
-          }}
-        >
-          <View style={styles.centeredView}>
-            <View style={styles.modalView}>
-              <Text style={styles.modalText}>{modalTayinOlan}-{modalBildirimNo}</Text>
-              <View style={{padding:10}}>
-                <TouchableOpacity
-                  style={[styles.button, styles.buttonClose]}
-                  onPress={() => {
-                    Alert.alert(
-                      "Emin Misiniz",
-                      modalBildirimNo + " No'lu İşe Tayin Olmaya emin misiniz? ",
-                      [
-                        {
-                          text: "Cancel",
-                          onPress: () => setModalCall2(modalCall2),
-                          style: "cancel"
-                        },
-                        { text: "OK", onPress: () => beAppointedToTheJob()}
-                      ]
-                    );
-                    
-                  }} //işi al buton
-                >
-                  <MaterialIcons name="assignment" color="white" size={25}/>
-                  <Text style={styles.textStyle}>Tayin Ol</Text>
-                </TouchableOpacity>
-              </View>
-              <View style={{padding:10}}>
-                <TouchableOpacity
-                 style={styles.cancel}
-                  onPress={() => cancelTheJob()} //işi devret buton
-                >
-                  <Text style={{...styles.textStyle, color:"black"}}>Cancel</Text>
-                </TouchableOpacity>
+      <View>
+        <SearchBar
+              style={{color:"red"}}
+              containerStyle={{}}
+              platform="android"
+              placeholder="Type Here..."
+              onChangeText={(search) =>onSearch(search)}
+              value={search}
+        />
+        <ScrollView>
+          <Text>{dummydata}</Text>
+          <Modal
+            animationType="slide"
+            transparent={true}
+            visible={modalCall}
+            onRequestClose={() => {
+              Alert.alert(
+                "Emin Misiniz",
+                modalBildirimNo + " No'lu İşlemi kapatmaya emin misiniz? ",
+                [
+                  {
+                    text: "Cancel",
+                    onPress: () => setModalCall(modalCall),
+                    style: "cancel"
+                  },
+                  { text: "OK", onPress: () => setModalCall(!modalCall)}
+                ]
+              );
+              
+            }}
+          >
+            <View style={styles.centeredView}>
+              <View style={styles.modalView}>
+                <Text style={styles.modalText}>{modalTayinOlan}-{modalBildirimNo}</Text>
+                <View style={{padding:10}}>
+                  <TouchableOpacity
+                    style={[styles.button, styles.buttonClose]}
+                    onPress={() => {
+                      Alert.alert(
+                        "Emin Misiniz",
+                        modalBildirimNo + " No'lu İşi almaya emin misiniz? ",
+                        [
+                          {
+                            text: "Cancel",
+                            onPress: () => setModalCall(modalCall),
+                            style: "cancel"
+                          },
+                          { text: "OK", onPress: () => takeOnTheJob()}
+                        ]
+                      );
+                      
+                    }} //işi al buton
+                  >
+                    <MaterialCommunityIcons name="arm-flex" color="white" size={25}/>
+                    <Text style={styles.textStyle}>İşi Al</Text>
+                  </TouchableOpacity>
+                </View>
+                <View style={{padding:10}}>
+                  <TouchableOpacity
+                    style={[styles.button, styles.buttonClose]}
+                    onPress={() => {
+                      Alert.alert(
+                        "Emin Misiniz",
+                        modalBildirimNo + " No'lu İşi devretmeye emin misiniz? ",
+                        [
+                          {
+                            text: "Cancel",
+                            onPress: () => setModalCall(modalCall),
+                            style: "cancel"
+                          },
+                          { text: "OK", onPress: () => handOverTheJob()}
+                        ]
+                      );
+                      
+                    }} //işi devret buton alert
+                  >
+                    <MaterialCommunityIcons name="handshake" color="white" size={25} />
+                    <Text style={styles.textStyle}>İşi Devret</Text>
+                  </TouchableOpacity>
+                </View>
+                <View style={{padding:10}}>
+                  <TouchableOpacity
+                  style={styles.cancel}
+                    onPress={() => cancelTheJob()} //işi devret buton
+                  >
+                    <Text style={{...styles.textStyle, color:"black"}}>Cancel</Text>
+                  </TouchableOpacity>
+                </View>
               </View>
             </View>
-          </View>
-        </Modal>
-      </ScrollView>
+          </Modal>
+          <Modal
+            animationType="slide"
+            transparent={true}
+            visible={modalCall2}
+            onRequestClose={() => {
+              Alert.alert(
+                "Emin Misiniz",
+                modalBildirimNo + " No'lu İşlemi kapatmaya emin misiniz? ",
+                [
+                  {
+                    text: "Cancel",
+                    onPress: () => setModalCall2(modalCall2),
+                    style: "cancel"
+                  },
+                  { text: "OK", onPress: () => setModalCall2(!modalCall2)}
+                ]
+              );
+              
+            }}
+          >
+            <View style={styles.centeredView}>
+              <View style={styles.modalView}>
+                <Text style={styles.modalText}>{modalTayinOlan}-{modalBildirimNo}</Text>
+                <View style={{padding:10}}>
+                  <TouchableOpacity
+                    style={[styles.button, styles.buttonClose]}
+                    onPress={() => {
+                      Alert.alert(
+                        "Emin Misiniz",
+                        modalBildirimNo + " No'lu İşe Tayin Olmaya emin misiniz? ",
+                        [
+                          {
+                            text: "Cancel",
+                            onPress: () => setModalCall2(modalCall2),
+                            style: "cancel"
+                          },
+                          { text: "OK", onPress: () => beAppointedToTheJob()}
+                        ]
+                      );
+                      
+                    }} //işi al buton
+                  >
+                    <MaterialIcons name="assignment" color="white" size={25}/>
+                    <Text style={styles.textStyle}>Tayin Ol</Text>
+                  </TouchableOpacity>
+                </View>
+                <View style={{padding:10}}>
+                  <TouchableOpacity
+                  style={styles.cancel}
+                    onPress={() => cancelTheJob()} //işi devret buton
+                  >
+                    <Text style={{...styles.textStyle, color:"black"}}>Cancel</Text>
+                  </TouchableOpacity>
+                </View>
+              </View>
+            </View>
+          </Modal>
+        </ScrollView>
+      </View>
     );
 }
 export default AppointedWorks;
@@ -270,7 +286,8 @@ const styles = StyleSheet.create({
       alignItems: "stretch", 
       justifyContent: "space-evenly",
       paddingBottom:10,
-      flexDirection: "row"
+      flexDirection: "row",
+      backgroundColor:"white"
     },
     scrollViewStyle: {     
       paddingTop:40,
