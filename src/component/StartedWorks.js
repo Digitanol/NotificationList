@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import { StyleSheet, Alert, Text, View, Image, TextInput ,TouchableOpacity, Dimensions, Modal} from "react-native";
 import {StartedWorksDummyData} from "../../data/data";
 import { ScrollView } from 'react-native-gesture-handler';
@@ -10,12 +10,17 @@ const width = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;
 
 const StartedWorks =(props) => {
+    var dummydata=[];
+    var StartedWorksDummyData2=[];
+    var StartedWorksDummyData1=StartedWorksDummyData;
+    var FilterResult;
     const loginID=props.route.params.loginID;
     const password=props.route.params.password;
     const [modalCall, setModalCall] = useState(false);
     const [modalSAPKullanici,setModalSAPKullanici]=useState("");
     const [modalBildirimNo,setModalBildirimNo]=useState("");
     const [search,setSearch]=useState("");
+    const [searchUpper,setSearchUpper]=useState("");
     const onPressStartedWorks = (SAPKullanici,BildirimNo) =>{
         setModalSAPKullanici(SAPKullanici);
         setModalBildirimNo(BildirimNo);
@@ -64,12 +69,32 @@ const StartedWorks =(props) => {
             );
     }
     const onSearch = (search) =>{
+      setSearchUpper(search.toUpperCase());
       setSearch(search);
       //arama butonu
+      
     }
+    if(StartedWorksDummyData1.filter(x=>String(x.SAPKullanici).includes(searchUpper))[0]){
+      FilterResult=[];
+      FilterResult=StartedWorksDummyData1.filter(x=>String(x.SAPKullanici).includes(searchUpper));
+      for (let i = 0; i < StartedWorksDummyData1.filter(x => String(x.SAPKullanici).includes(searchUpper)).length; i++){
+        StartedWorksDummyData2.push(
+          FilterResult[i]
+        );
+      }
+    }else{
+      FilterResult=[];
+      FilterResult=StartedWorksDummyData1.filter(x => String(x.BildirimNo).includes(search));
+      for (let i = 0; i < StartedWorksDummyData1.filter(x => String(x.BildirimNo).includes(search)).length; i++){
+        StartedWorksDummyData2.push(
+          FilterResult[i]
+        );
+      }
+    }  
 
-    var dummydata=[];
-    for (let i = 0; i < StartedWorksDummyData.length; i++){
+    if(search != "" && StartedWorksDummyData2 != ""){
+      dummydata=[];
+      for (let i = 0; i < StartedWorksDummyData2.length; i++){
         dummydata.push(
           <View key={i} style={styles.container} >
           <TouchableOpacity 
@@ -77,48 +102,103 @@ const StartedWorks =(props) => {
                 height:130,
                 width:"95%",
                 flexDirection:"row",  
-                backgroundColor: loginID==StartedWorksDummyData[i].SAPKullanici ? "#1272a3": "#71aac8",
+                backgroundColor: loginID==StartedWorksDummyData2[i].SAPKullanici ? "#1272a3": "#71aac8",
                 borderTopRightRadius: 10,
                 borderTopLeftRadius: 10,
                 borderBottomRightRadius:10,
                 borderBottomLeftRadius:10,}} 
-                onPress={()=>onPressStartedWorks(StartedWorksDummyData[i].SAPKullanici,StartedWorksDummyData[i].BildirimNo)} >
+                onPress={()=>onPressStartedWorks(StartedWorksDummyData2[i].SAPKullanici,StartedWorksDummyData2[i].BildirimNo)} >
             <View style={styles.ViewStyle1} >
               <Text style={{fontWeight:"bold", fontSize:13, color:"black"}}>BildirimNo:</Text>
-              <Text style={{fontWeight:"bold", fontSize:12, color:"white"}}>{StartedWorksDummyData[i].BildirimNo}</Text>
+              <Text style={{fontWeight:"bold", fontSize:12, color:"white"}}>{StartedWorksDummyData2[i].BildirimNo}</Text>
               <Text style={{fontSize:13, fontWeight:"bold" , color:"black"}}>SAP Kullanıcı:</Text>
-              <Text style={{fontSize:12, fontWeight:"bold", color:"white"}}>{StartedWorksDummyData[i].SAPKullanici}</Text>
+              <Text style={{fontSize:12, fontWeight:"bold", color:"white"}}>{StartedWorksDummyData2[i].SAPKullanici}</Text>
             </View>
             <View style={styles.ViewStyle2}>
               <View style={{flexDirection:"row"}}>
                 <Text style={{fontSize:12, fontWeight:"bold"}}>Tenik Birim Tanımı: </Text>
-                <Text style={{fontSize:12, fontWeight:"bold",color:"white"}}>{StartedWorksDummyData[i].TeknikBirimTanimi}</Text>
+                <Text style={{fontSize:12, fontWeight:"bold",color:"white"}}>{StartedWorksDummyData2[i].TeknikBirimTanimi}</Text>
               </View>
               <View style={{flexDirection:"row"}}>
                 <Text style={{fontSize:12, fontWeight:"bold"}}>Arıza Kodu: </Text>
-                <Text style={{fontSize:12, fontWeight:"bold",color:"white"}}>{StartedWorksDummyData[i].ArizaKodu} </Text>
+                <Text style={{fontSize:12, fontWeight:"bold",color:"white"}}>{StartedWorksDummyData2[i].ArizaKodu} </Text>
               </View>
               <View style={{flexDirection:"row"}}>
                 <Text style={{fontSize:12, fontWeight:"bold"}}>Ekipman Tanımı: </Text>
-                <Text style={{fontSize:12, fontWeight:"bold",color:"white"}}>{StartedWorksDummyData[i].EkipmanTanimi} </Text>
+                <Text style={{fontSize:12, fontWeight:"bold",color:"white"}}>{StartedWorksDummyData2[i].EkipmanTanimi} </Text>
               </View>
               <View style={{flexDirection:"row"}}>
                 <Text style={{fontSize:12, fontWeight:"bold"}}>Arıza Bildirim Açıklaması: </Text>
-                <Text style={{fontSize:12, fontWeight:"bold",color:"white"}}>{StartedWorksDummyData[i].ArizaKoduKisaAciklama}</Text>
+                <Text style={{fontSize:12, fontWeight:"bold",color:"white"}}>{StartedWorksDummyData2[i].ArizaKoduKisaAciklama}</Text>
               </View>
               <View style={{flexDirection:"row"}}>
                 <Text style={{fontSize:12, fontWeight:"bold"}}>Bildirim Tarihi: </Text>
-                <Text style={{fontSize:12, fontWeight:"bold",color:"white"}}>{StartedWorksDummyData[i].ArizaBaslangic}</Text>
+                <Text style={{fontSize:12, fontWeight:"bold",color:"white"}}>{StartedWorksDummyData2[i].ArizaBaslangic}</Text>
               </View>
               <View style={{flexDirection:"row"}}>
                 <Text style={{fontSize:12, fontWeight:"bold" , color:"black"}}>Bildiren: </Text>
-                <Text style={{fontSize:12, fontWeight:"bold", color:"white"}}>{StartedWorksDummyData[i].Bildiren}</Text>
+                <Text style={{fontSize:12, fontWeight:"bold", color:"white"}}>{StartedWorksDummyData2[i].Bildiren}</Text>
               </View> 
             </View>        
           </TouchableOpacity>
           </View>
         );
       }
+    }
+    if(search == ""){
+      dummydata=[];
+      for (let i = 0; i < StartedWorksDummyData1.length; i++){
+        dummydata.push(
+          <View key={i} style={styles.container} >
+          <TouchableOpacity 
+            style={{
+                height:130,
+                width:"95%",
+                flexDirection:"row",  
+                backgroundColor: loginID==StartedWorksDummyData1[i].SAPKullanici ? "#1272a3": "#71aac8",
+                borderTopRightRadius: 10,
+                borderTopLeftRadius: 10,
+                borderBottomRightRadius:10,
+                borderBottomLeftRadius:10,}} 
+                onPress={()=>onPressStartedWorks(StartedWorksDummyData1[i].SAPKullanici,StartedWorksDummyData1[i].BildirimNo)} >
+            <View style={styles.ViewStyle1} >
+              <Text style={{fontWeight:"bold", fontSize:13, color:"black"}}>BildirimNo:</Text>
+              <Text style={{fontWeight:"bold", fontSize:12, color:"white"}}>{StartedWorksDummyData1[i].BildirimNo}</Text>
+              <Text style={{fontSize:13, fontWeight:"bold" , color:"black"}}>SAP Kullanıcı:</Text>
+              <Text style={{fontSize:12, fontWeight:"bold", color:"white"}}>{StartedWorksDummyData1[i].SAPKullanici}</Text>
+            </View>
+            <View style={styles.ViewStyle2}>
+              <View style={{flexDirection:"row"}}>
+                <Text style={{fontSize:12, fontWeight:"bold"}}>Tenik Birim Tanımı: </Text>
+                <Text style={{fontSize:12, fontWeight:"bold",color:"white"}}>{StartedWorksDummyData1[i].TeknikBirimTanimi}</Text>
+              </View>
+              <View style={{flexDirection:"row"}}>
+                <Text style={{fontSize:12, fontWeight:"bold"}}>Arıza Kodu: </Text>
+                <Text style={{fontSize:12, fontWeight:"bold",color:"white"}}>{StartedWorksDummyData1[i].ArizaKodu} </Text>
+              </View>
+              <View style={{flexDirection:"row"}}>
+                <Text style={{fontSize:12, fontWeight:"bold"}}>Ekipman Tanımı: </Text>
+                <Text style={{fontSize:12, fontWeight:"bold",color:"white"}}>{StartedWorksDummyData1[i].EkipmanTanimi} </Text>
+              </View>
+              <View style={{flexDirection:"row"}}>
+                <Text style={{fontSize:12, fontWeight:"bold"}}>Arıza Bildirim Açıklaması: </Text>
+                <Text style={{fontSize:12, fontWeight:"bold",color:"white"}}>{StartedWorksDummyData1[i].ArizaKoduKisaAciklama}</Text>
+              </View>
+              <View style={{flexDirection:"row"}}>
+                <Text style={{fontSize:12, fontWeight:"bold"}}>Bildirim Tarihi: </Text>
+                <Text style={{fontSize:12, fontWeight:"bold",color:"white"}}>{StartedWorksDummyData1[i].ArizaBaslangic}</Text>
+              </View>
+              <View style={{flexDirection:"row"}}>
+                <Text style={{fontSize:12, fontWeight:"bold" , color:"black"}}>Bildiren: </Text>
+                <Text style={{fontSize:12, fontWeight:"bold", color:"white"}}>{StartedWorksDummyData1[i].Bildiren}</Text>
+              </View> 
+            </View>        
+          </TouchableOpacity>
+          </View>
+        );
+      }
+    }
+    
     return(
       <View>
         <SearchBar
