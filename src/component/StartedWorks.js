@@ -203,13 +203,13 @@ const StartedWorks =(props) => {
       <View>
         <SearchBar
               style={{color:"red"}}
-              containerStyle={{}}
+              containerStyle={{height:height/14,paddingTop:5,backgroundColor:"white"}}
               platform="android"
               placeholder="Type Here..."
               onChangeText={(search) =>onSearch(search)}
               value={search}
         />
-        <ScrollView>
+        <ScrollView style={styles.scrollViewStyle}>
           <Text>{dummydata}</Text>
           <Modal
               animationType="slide"
@@ -352,9 +352,9 @@ const styles = StyleSheet.create({
       flexDirection: "row"
     },
     scrollViewStyle: {     
-      paddingTop:40,
+      paddingTop:5,
       width:width,
-      height:height,
+      height:height/1.26,
       flexDirection:"column",
     },
     ViewStyle1: {

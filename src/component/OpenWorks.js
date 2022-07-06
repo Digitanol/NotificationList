@@ -7,9 +7,15 @@ const width = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;
 
 const OpenWorks =(props) => {
+    var dummydata=[];
+    var dummydata=[];
+    var OpenWorksDummyData2=[];
+    var OpenWorksDummyData1=OpenWorksDummyData;
+    var FilterResult;
     const loginID=props.route.params.loginID;
     const password=props.route.params.password;
     const [search,setSearch]=useState("");
+    const [searchUpper,setSearchUpper]=useState("");
     const takeOnTheJob = (BildirimNo,Bildiren) =>{
       Alert.alert(
         "Emin Misiniz",
@@ -25,71 +31,142 @@ const OpenWorks =(props) => {
       );
     };
     const onSearch = (search) =>{
+      setSearchUpper(search.toUpperCase());
       setSearch(search);
       
     }
-    var dummydata=[];
-    for (let i = 0; i < OpenWorksDummyData.length; i++){
+    if(OpenWorksDummyData1.filter(x=>String(x.Bildiren).includes(searchUpper))[0]){
+      FilterResult=[];
+      FilterResult=OpenWorksDummyData1.filter(x=>String(x.Bildiren).includes(searchUpper));
+      for (let i = 0; i < OpenWorksDummyData1.filter(x => String(x.Bildiren).includes(searchUpper)).length; i++){
+        OpenWorksDummyData2.push(
+          FilterResult[i]
+        );
+      }
+    }else{
+      FilterResult=[];
+      FilterResult=OpenWorksDummyData1.filter(x => String(x.BildirimNo).includes(search));
+      for (let i = 0; i < OpenWorksDummyData1.filter(x => String(x.BildirimNo).includes(search)).length; i++){
+        OpenWorksDummyData2.push(
+          FilterResult[i]
+        );
+      }
+    }
+    if(search==null){
+      for (let i = 0; i < OpenWorksDummyData1.length; i++){
         dummydata.push(
           <View key={i} style={styles.container} >
-          <TouchableOpacity 
-            style={{
-                height:130,
-                width:"95%",
-                flexDirection:"row",  
-                backgroundColor: OpenWorksDummyData[i].BildirimNo %1 ==0 ? "#FA7E5E" : "#FA7E5E",
-                borderTopRightRadius: 10,
-                borderTopLeftRadius: 10,
-                borderBottomRightRadius:10,
-                borderBottomLeftRadius:10,}} 
-                onPress={()=>takeOnTheJob(OpenWorksDummyData[i].BildirimNo, OpenWorksDummyData[i].Bildiren)} >
-            <View style={styles.ViewStyle1} >
-              <Text style={{fontWeight:"bold", fontSize:13, color:"black"}}>
-                BildirimNo:
-              </Text>
-              <Text style={{fontWeight:"bold", fontSize:12, color:"white"}}>
-                {OpenWorksDummyData[i].BildirimNo}
-              </Text>
-                <Text style={{fontSize:13, fontWeight:"bold" , color:"black"}}>Bildiren:</Text>
-                <Text style={{fontSize:12, fontWeight:"bold", color:"white"}}>{OpenWorksDummyData[i].Bildiren}</Text>
-            </View>
-            <View style={styles.ViewStyle2}>
-              <View style={{flexDirection:"row"}}>
-                <Text style={{fontSize:12, fontWeight:"bold"}}>Tenik Birim Tanımı: </Text>
-                <Text style={{fontSize:12, fontWeight:"bold",color:"white"}}>{OpenWorksDummyData[i].TeknikBirimTanimi}</Text>
+            <TouchableOpacity 
+              style={{
+                  height:130,
+                  width:"95%",
+                  flexDirection:"row",  
+                  backgroundColor: OpenWorksDummyData1[i].BildirimNo %1 ==0 ? "#FA7E5E" : "#FA7E5E",
+                  borderTopRightRadius: 10,
+                  borderTopLeftRadius: 10,
+                  borderBottomRightRadius:10,
+                  borderBottomLeftRadius:10,}} 
+                  onPress={()=>takeOnTheJob(OpenWorksDummyData1[i].BildirimNo, OpenWorksDummyData1[i].Bildiren)} >
+              <View style={styles.ViewStyle1} >
+                <Text style={{fontWeight:"bold", fontSize:13, color:"black"}}>
+                  BildirimNo:
+                </Text>
+                <Text style={{fontWeight:"bold", fontSize:12, color:"white"}}>
+                  {OpenWorksDummyData1[i].BildirimNo}
+                </Text>
+                  <Text style={{fontSize:13, fontWeight:"bold" , color:"black"}}>Bildiren:</Text>
+                  <Text style={{fontSize:12, fontWeight:"bold", color:"white"}}>{OpenWorksDummyData1[i].Bildiren}</Text>
               </View>
-              <View style={{flexDirection:"row"}}>
-                <Text style={{fontSize:12, fontWeight:"bold"}}>Arıza Kodu: </Text>
-                <Text style={{fontSize:12, fontWeight:"bold",color:"white"}}>{OpenWorksDummyData[i].ArizaKodu} </Text>
-              </View>
-              <View style={{flexDirection:"row"}}>
-                <Text style={{fontSize:12, fontWeight:"bold"}}>Ekipman Tanımı: </Text>
-                <Text style={{fontSize:12, fontWeight:"bold",color:"white"}}>{OpenWorksDummyData[i].EkipmanTanimi} </Text>
-              </View>
-              <View style={{flexDirection:"row"}}>
-                <Text style={{fontSize:12, fontWeight:"bold"}}>Arıza Bildirim Açıklaması: </Text>
-                <Text style={{fontSize:12, fontWeight:"bold",color:"white"}}>{OpenWorksDummyData[i].ArizaKoduKisaAciklama}</Text>
-              </View>
-              <View style={{flexDirection:"row"}}>
-                <Text style={{fontSize:12, fontWeight:"bold"}}>Bildirim Tarihi: </Text>
-                <Text style={{fontSize:12, fontWeight:"bold",color:"white"}}>{OpenWorksDummyData[i].ArizaBaslangic}</Text>
-              </View>
-            </View>        
-          </TouchableOpacity>
+              <View style={styles.ViewStyle2}>
+                <View style={{flexDirection:"row"}}>
+                  <Text style={{fontSize:12, fontWeight:"bold"}}>Tenik Birim Tanımı: </Text>
+                  <Text style={{fontSize:12, fontWeight:"bold",color:"white"}}>{OpenWorksDummyData1[i].TeknikBirimTanimi}</Text>
+                </View>
+                <View style={{flexDirection:"row"}}>
+                  <Text style={{fontSize:12, fontWeight:"bold"}}>Arıza Kodu: </Text>
+                  <Text style={{fontSize:12, fontWeight:"bold",color:"white"}}>{OpenWorksDummyData1[i].ArizaKodu} </Text>
+                </View>
+                <View style={{flexDirection:"row"}}>
+                  <Text style={{fontSize:12, fontWeight:"bold"}}>Ekipman Tanımı: </Text>
+                  <Text style={{fontSize:12, fontWeight:"bold",color:"white"}}>{OpenWorksDummyData1[i].EkipmanTanimi} </Text>
+                </View>
+                <View style={{flexDirection:"row"}}>
+                  <Text style={{fontSize:12, fontWeight:"bold"}}>Arıza Bildirim Açıklaması: </Text>
+                  <Text style={{fontSize:12, fontWeight:"bold",color:"white"}}>{OpenWorksDummyData1[i].ArizaKoduKisaAciklama}</Text>
+                </View>
+                <View style={{flexDirection:"row"}}>
+                  <Text style={{fontSize:12, fontWeight:"bold"}}>Bildirim Tarihi: </Text>
+                  <Text style={{fontSize:12, fontWeight:"bold",color:"white"}}>{OpenWorksDummyData1[i].ArizaBaslangic}</Text>
+                </View>
+              </View>        
+            </TouchableOpacity>
           </View>
         );
       }
+    }
+    if(search != null && OpenWorksDummyData2 != null){
+      for (let i = 0; i < OpenWorksDummyData2.length; i++){
+        dummydata.push(
+          <View key={i} style={styles.container} >
+            <TouchableOpacity 
+              style={{
+                  height:130,
+                  width:"95%",
+                  flexDirection:"row",  
+                  backgroundColor: OpenWorksDummyData2[i].BildirimNo %1 ==0 ? "#FA7E5E" : "#FA7E5E",
+                  borderTopRightRadius: 10,
+                  borderTopLeftRadius: 10,
+                  borderBottomRightRadius:10,
+                  borderBottomLeftRadius:10,}} 
+                  onPress={()=>takeOnTheJob(OpenWorksDummyData2[i].BildirimNo, OpenWorksDummyData2[i].Bildiren)} >
+              <View style={styles.ViewStyle1} >
+                <Text style={{fontWeight:"bold", fontSize:13, color:"black"}}>
+                  BildirimNo:
+                </Text>
+                <Text style={{fontWeight:"bold", fontSize:12, color:"white"}}>
+                  {OpenWorksDummyData2[i].BildirimNo}
+                </Text>
+                  <Text style={{fontSize:13, fontWeight:"bold" , color:"black"}}>Bildiren:</Text>
+                  <Text style={{fontSize:12, fontWeight:"bold", color:"white"}}>{OpenWorksDummyData2[i].Bildiren}</Text>
+              </View>
+              <View style={styles.ViewStyle2}>
+                <View style={{flexDirection:"row"}}>
+                  <Text style={{fontSize:12, fontWeight:"bold"}}>Tenik Birim Tanımı: </Text>
+                  <Text style={{fontSize:12, fontWeight:"bold",color:"white"}}>{OpenWorksDummyData2[i].TeknikBirimTanimi}</Text>
+                </View>
+                <View style={{flexDirection:"row"}}>
+                  <Text style={{fontSize:12, fontWeight:"bold"}}>Arıza Kodu: </Text>
+                  <Text style={{fontSize:12, fontWeight:"bold",color:"white"}}>{OpenWorksDummyData2[i].ArizaKodu} </Text>
+                </View>
+                <View style={{flexDirection:"row"}}>
+                  <Text style={{fontSize:12, fontWeight:"bold"}}>Ekipman Tanımı: </Text>
+                  <Text style={{fontSize:12, fontWeight:"bold",color:"white"}}>{OpenWorksDummyData2[i].EkipmanTanimi} </Text>
+                </View>
+                <View style={{flexDirection:"row"}}>
+                  <Text style={{fontSize:12, fontWeight:"bold"}}>Arıza Bildirim Açıklaması: </Text>
+                  <Text style={{fontSize:12, fontWeight:"bold",color:"white"}}>{OpenWorksDummyData2[i].ArizaKoduKisaAciklama}</Text>
+                </View>
+                <View style={{flexDirection:"row"}}>
+                  <Text style={{fontSize:12, fontWeight:"bold"}}>Bildirim Tarihi: </Text>
+                  <Text style={{fontSize:12, fontWeight:"bold",color:"white"}}>{OpenWorksDummyData2[i].ArizaBaslangic}</Text>
+                </View>
+              </View>        
+            </TouchableOpacity>
+          </View>
+        );
+      }
+    }
     return(
       <View>
         <SearchBar
-          style={{color:"red"}}
-          containerStyle={{}}
+          style={{color:"black"}}
+          containerStyle={{height:height/14,paddingTop:5,backgroundColor:"white"}}
           platform="android"
           placeholder="Type Here..."
           onChangeText={(search) =>onSearch(search)}
           value={search}
         />
-        <ScrollView>
+        <ScrollView style={styles.scrollViewStyle}>
           <Text>{dummydata}</Text>
         </ScrollView>
       </View>
@@ -106,9 +183,9 @@ const styles = StyleSheet.create({
       flexDirection: "row"
     },
     scrollViewStyle: {     
-      paddingTop:40,
+      paddingTop:5,
       width:width,
-      height:height,
+      height:height/1.26,
       flexDirection:"column",
     },
     ViewStyle1: {
