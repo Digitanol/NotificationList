@@ -6,10 +6,12 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import { SearchBar } from "react-native-elements";
 
+
 const width = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;
 
-const StartedWorks =(props,{navigation}) => {
+const StartedWorks =(props) => {
+    const { navigation } = props;
     var dummydata=[];
     var StartedWorksDummyData2=[];
     var StartedWorksDummyData1=StartedWorksDummyData;
