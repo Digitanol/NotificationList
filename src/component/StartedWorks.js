@@ -9,7 +9,7 @@ import { SearchBar } from "react-native-elements";
 const width = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;
 
-const StartedWorks =(props) => {
+const StartedWorks =(props,{navigation}) => {
     var dummydata=[];
     var StartedWorksDummyData2=[];
     var StartedWorksDummyData1=StartedWorksDummyData;
@@ -45,8 +45,9 @@ const StartedWorks =(props) => {
     setModalCall(!modalCall);
     //işi bitir transaction çalıştırılacak-
     }
-    const consumeMaterial = () => {
+    const consumeMaterial = (modalBildirimNo,modalSAPKullanici,loginID,password) => {
     setModalCall(!modalCall);
+    navigation.navigate("MaterialConsumption", {loginID:loginID,password:password,bildirimNo:modalBildirimNo,SAPKullanici:modalSAPKullanici});
     //Malzeme Tüket transaction çalıştırılacak
     }
     const completeTheJob = () => {
@@ -283,21 +284,7 @@ const StartedWorks =(props) => {
                   <View style={{padding:10}}>
                       <TouchableOpacity
                       style={[styles.button, styles.buttonClose]}
-                      onPress={() => {
-                          Alert.alert(
-                          "Emin Misiniz",
-                          modalBildirimNo + " No'lu İşi bitirmeye emin misiniz? ",
-                          [
-                              {
-                              text: "Cancel",
-                              onPress: () => setModalCall(modalCall),
-                              style: "cancel"
-                              },
-                              { text: "OK", onPress: () => consumeMaterial()}
-                          ]
-                          );
-                          
-                      }} //Malzeme Tüket
+                      onPress={() => consumeMaterial(modalBildirimNo,modalSAPKullanici,loginID,password)} //Malzeme Tüket
                       >
                       <MaterialCommunityIcons name="beaker-minus" color="white" size={25} />
                       <Text style={styles.textStyle}>Malzeme Tüket</Text>
