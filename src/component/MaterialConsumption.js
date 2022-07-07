@@ -1,4 +1,4 @@
-import {View, Text, SafeAreaView, StatusBar, Dimensions, StyleSheet, ScrollView, Image} from 'react-native';
+import {View, Text, SafeAreaView, StatusBar, Dimensions, StyleSheet, ScrollView, Image, TouchableOpacity} from 'react-native';
 import React, { useState } from 'react';
 import NumericInput from 'react-native-numeric-input';
 import SelectDropdown from 'react-native-select-dropdown';
@@ -14,300 +14,363 @@ const MaterialConsumption = (props) =>{
     const BildirimNo=props.route.params.bildirimNo;
     const [state,setState]=useState("");
     const [value,setValue]=useState("");
-    const countries = [
-        'Egypt',
-        'Canada',
-        'Australia',
-        'Ireland',
-        'Brazil',
-        'England',
-        'Dubai',
-        'France',
-        'Germany',
-        'Saudi Arabia',
-        'Argentina',
-        'India',
-      ];
-      const countriesWithFlags = [
-        {title: 'Egypt', image: require('./Images/Egypt.png')},
-        {title: 'Canada', image: require('./Images/Canada.png')},
-        {title: 'Australia', image: require('./Images/Australia.png')},
-        {title: 'Ireland', image: require('./Images/Ireland.png')},
-        {title: 'Brazil', image: require('./Images/Brazil.png')},
-        {title: 'England', image: require('./Images/England.jpg')},
-        {title: 'Dubai', image: require('./Images/Dubai.png')},
-      ];
+    const [materialNo,setMaterialNo] = useState("");
+    const [consumptionQuantity,setConsumptionQuantity] = useState("");
+    const [productionPlaceNo,setProductionPlaceNo] = useState("");
+    const [warehouseNo,setWarehouseNo] = useState("");
+    const [valuationType,setValuationType] = useState("");
+    const [materialDefinition,setMaterialDefinition] = useState("MONITOR");
+    const [unit,setUnit] = useState("ADT");
+    const [stock,setStock] = useState("100");
+
+    const MalzemeNo = ["50003", "50004","50005","50006"] ;
+    const DegerlemeTuru = ["YENİ", "ARIZALI", "TAMIRLI"];
+    const UretimYeri = ["1200", "1300", "1400", "1500"];
+    const DepolamaYeri = ["1250", "1350", "1450", "1550"];
+    var viewData = [];
+    var MaterialConsumptionData = [];
+    
+    const saveButton = () =>{
+        MaterialConsumptionData.push(
+            {
+                "materialNo":materialNo,
+                "consumptionQuantity" :consumptionQuantity,
+                "productionPlaceNo": productionPlaceNo,
+                "warehouseNo": warehouseNo,
+                "valuationType": valuationType,
+                "materialDefinition" : materialDefinition,
+                "unit": unit,
+                "stock":stock,
+            }
+        );
+        setStock("");
+        setUnit("");
+        setMaterialDefinition("");
+        setValuationType("");
+        setWarehouseNo("");
+        setProductionPlaceNo("");
+        setConsumptionQuantity("");
+        setMaterialNo("");
+    
+    }
+    if(MaterialConsumptionData!=null){
+        viewData=[];
+        for(let i=0; i<MaterialConsumptionData.length; i++){
+            viewData.push(
+                <View key={i} style={styles.container} >
+                    <TouchableOpacity 
+                        style={{
+                            height:130,
+                            width:"95%",
+                            flexDirection:"row",  
+                            backgroundColor: loginID==MaterialConsumptionData[i].SAPKullanici ? "#1272a3": "#71aac8",
+                            borderTopRightRadius: 10,
+                            borderTopLeftRadius: 10,
+                            borderBottomRightRadius:10,
+                            borderBottomLeftRadius:10,
+                        }} 
+                        onPress={()=>onPressStartedWorks()} >
+                        <View>
+                            <Text>Malzeme No:</Text>
+                            <Text style={styles.ParameterTextStyle} >123124123</Text>
+                        </View>
+                    </TouchableOpacity>
+                </View>
+            );
+        }
+    }
+     
     return(
         <View>
-            <Text>Material Consumption Test Login ID:{loginID}, Password:{password}, SAPKullanici: {SAPKullanici}, BildirimNo: {BildirimNo}</Text>
-            <View>
-                <NumericInput 
-                    value={value} 
-                    onChange={value => setState({value})} 
-                    onLimitReached={(isMax,msg) => console.log(isMax,msg)}
-                    totalWidth={150} 
-                    totalHeight={30} 
-                    iconSize={25}
-                    step={1}
-                    minValue={0}
-                    valueType="integer"
-                    rounded 
-                    textColor='#B0228C' 
-                    iconStyle={{ color: 'white' }} 
-                    rightButtonBackgroundColor='#EA3788' 
-                    leftButtonBackgroundColor='#E56B70' />
-
-<SelectDropdown
-            data={countries}
-            // defaultValueByIndex={1} // use default value by index or default value
-            // defaultValue={'Canada'} // use default value by index or default value
-            onSelect={(selectedItem, index) => {
-              console.log(selectedItem, index);
-            }}
-            buttonTextAfterSelection={(selectedItem, index) => {
-              return selectedItem;
-            }}
-            rowTextForSelection={(item, index) => {
-              return item;
-            }}
-          />
-
-          <SelectDropdown
-            data={countries}
-            // defaultValueByIndex={1}
-            // defaultValue={'Egypt'}
-            onSelect={(selectedItem, index) => {
-              console.log(selectedItem, index);
-            }}
-            defaultButtonText={'Select country'}
-            buttonTextAfterSelection={(selectedItem, index) => {
-              return selectedItem;
-            }}
-            rowTextForSelection={(item, index) => {
-              return item;
-            }}
-            buttonStyle={styles.dropdown1BtnStyle}
-            buttonTextStyle={styles.dropdown1BtnTxtStyle}
-            renderDropdownIcon={isOpened => {
-              return <FontAwesome name={isOpened ? 'chevron-up' : 'chevron-down'} color={'#444'} size={18} />;
-            }}
-            dropdownIconPosition={'right'}
-            dropdownStyle={styles.dropdown1DropdownStyle}
-            rowStyle={styles.dropdown1RowStyle}
-            rowTextStyle={styles.dropdown1RowTxtStyle}
-          />
-
-          <SelectDropdown
-            data={countries}
-            // defaultValueByIndex={1}
-            // defaultValue={'England'}
-            onSelect={(selectedItem, index) => {
-              console.log(selectedItem, index);
-            }}
-            defaultButtonText={'Select country'}
-            buttonTextAfterSelection={(selectedItem, index) => {
-              return selectedItem;
-            }}
-            rowTextForSelection={(item, index) => {
-              return item;
-            }}
-            buttonStyle={styles.dropdown2BtnStyle}
-            buttonTextStyle={styles.dropdown2BtnTxtStyle}
-            renderDropdownIcon={isOpened => {
-              return <FontAwesome name={isOpened ? 'chevron-up' : 'chevron-down'} color={'#FFF'} size={18} />;
-            }}
-            dropdownIconPosition={'right'}
-            dropdownStyle={styles.dropdown2DropdownStyle}
-            rowStyle={styles.dropdown2RowStyle}
-            rowTextStyle={styles.dropdown2RowTxtStyle}
-          />
-
-          <SelectDropdown
-            data={countriesWithFlags}
-            // defaultValueByIndex={1}
-            // defaultValue={{
-            //   title: 'England',
-            //   image: require('./Images/England.jpg'),
-            // }}
-            onSelect={(selectedItem, index) => {
-              console.log(selectedItem, index);
-            }}
-            buttonStyle={styles.dropdown3BtnStyle}
-            renderCustomizedButtonChild={(selectedItem, index) => {
-              return (
-                <View style={styles.dropdown3BtnChildStyle}>
-                  {selectedItem ? (
-                    <Image source={selectedItem.image} style={styles.dropdown3BtnImage} />
-                  ) : (
-                    <Ionicons name="md-earth-sharp" color={'#444'} size={32} />
-                  )}
-                  <Text style={styles.dropdown3BtnTxt}>{selectedItem ? selectedItem.title : 'Select country'}</Text>
-                  <FontAwesome name="chevron-down" color={'#444'} size={18} />
+            <View style={styles.View1Style}>
+                <View style={styles.View2Style}>
+                    <Text style={styles.TextStyle}>Malzeme No</Text>
+                    <SelectDropdown
+                        data={MalzemeNo}
+                        // defaultValueByIndex={1}
+                        // defaultValue={'England'}
+                        onSelect={(selectedItem, index) => {
+                        setMaterialNo(selectedItem);
+                        }}
+                        defaultButtonText={'Malzeme No'}
+                        buttonTextAfterSelection={(selectedItem, index) => {
+                        return selectedItem;
+                        }}
+                        rowTextForSelection={(item, index) => {
+                        return item;
+                        }}
+                        buttonStyle={{...styles.SelectButonStyle,width:width/2.5}}
+                        buttonTextStyle={styles.SelectButonTxtStyle}
+                        renderDropdownIcon={isOpened => {
+                        return <FontAwesome name={isOpened ? 'chevron-up' : 'chevron-down'} color={'#6782B4'} size={18} />;
+                        }}
+                        dropdownIconPosition={'right'}
+                        dropdownStyle={styles.SelectDropdownStyle}
+                        rowStyle={styles.SelectRowStyle}
+                        rowTextStyle={styles.SelectRowTxtStyle}
+                    />
                 </View>
-              );
-            }}
-            dropdownStyle={styles.dropdown3DropdownStyle}
-            rowStyle={styles.dropdown3RowStyle}
-            renderCustomizedRowChild={(item, index) => {
-              return (
-                <View style={styles.dropdown3RowChildStyle}>
-                  <Image source={item.image} style={styles.dropdownRowImage} />
-                  <Text style={styles.dropdown3RowTxt}>{item.title}</Text>
+                <View style={styles.View2Style}>
+                    <Text style={styles.TextStyle}>Kullanım Miktarı</Text>
+                    <NumericInput 
+                        value={value} 
+                        onChange={value => setConsumptionQuantity({value})} 
+                        onLimitReached={(isMax,msg) => console.log(isMax,msg)}
+                        totalWidth={width/2.5} 
+                        totalHeight={45} 
+                        iconSize={25}
+                        step={1}
+                        minValue={0}
+                        valueType="real"
+                        rounded 
+                        textColor='#000000' 
+                        iconStyle={{ color: '#FFFFFF' }} 
+                        rightButtonBackgroundColor='#6782B4' 
+                        leftButtonBackgroundColor='#B1BFD8' 
+                        />
                 </View>
-              );
-            }}
-          />
-
-          <SelectDropdown
-            data={countriesWithFlags}
-            // defaultValueByIndex={1}
-            // defaultValue={'India'}
-            onSelect={(selectedItem, index) => {
-              console.log(selectedItem, index);
-            }}
-            defaultButtonText={'Select country'}
-            buttonTextAfterSelection={(selectedItem, index) => {
-              return selectedItem.title;
-            }}
-            rowTextForSelection={(item, index) => {
-              return item.title;
-            }}
-            buttonStyle={styles.dropdown4BtnStyle}
-            buttonTextStyle={styles.dropdown4BtnTxtStyle}
-            renderDropdownIcon={isOpened => {
-              return <FontAwesome name={isOpened ? 'chevron-up' : 'chevron-down'} color={'#444'} size={18} />;
-            }}
-            dropdownIconPosition={'left'}
-            dropdownStyle={styles.dropdown4DropdownStyle}
-            rowStyle={styles.dropdown4RowStyle}
-            rowTextStyle={styles.dropdown4RowTxtStyle}
-          />
-
             </View>
-            
+            <View style={styles.View1Style}>        
+                <View style={styles.View2Style}>
+                    <Text style={styles.TextStyle}>Malzeme Tanımı</Text>
+                    <Text>MONITOR</Text>
+                </View>
+                <View style={styles.View2Style}>
+                    <Text style={styles.TextStyle}>Birim</Text>
+                    <Text>ADT</Text>
+                </View>
+                <View style={styles.View2Style}>
+                    <Text style={styles.TextStyle}>Stok Miktarı</Text>
+                    <Text>100</Text>
+                </View>
+                <View style={styles.View2Style}>
+                    <Text style={styles.TextStyle}>Birim</Text>
+                    <Text>ADT</Text>
+                </View>
+            </View>
+            <View style={{...styles.View1Style}}>
+                <View style={styles.View2Style}>
+                    <Text style={styles.TextStyle}>Üretim Yeri</Text>
+                    <SelectDropdown
+                        data={UretimYeri}
+                        // defaultValueByIndex={1}
+                        // defaultValue={'England'}
+                        onSelect={(selectedItem, index) => {
+                        setProductionPlaceNo(selectedItem);
+                        }}
+                        defaultButtonText={'Üretim Yeri'}
+                        buttonTextAfterSelection={(selectedItem, index) => {
+                        return selectedItem;
+                        }}
+                        rowTextForSelection={(item, index) => {
+                        return item;
+                        }}
+                        buttonStyle={styles.SelectButonStyle}
+                        buttonTextStyle={styles.SelectButonTxtStyle}
+                        renderDropdownIcon={isOpened => {
+                        return <FontAwesome name={isOpened ? 'chevron-up' : 'chevron-down'} color={'#6782B4'} size={18} />;
+                        }}
+                        dropdownIconPosition={'right'}
+                        dropdownStyle={styles.SelectDropdownStyle}
+                        rowStyle={styles.SelectRowStyle}
+                        rowTextStyle={styles.SelectRowTxtStyle}
+                    />
+                </View>
+                <View style={styles.View2Style}>
+                    <Text style={styles.TextStyle}>Depo Yeri</Text>
+                    <SelectDropdown
+                        data={DepolamaYeri}
+                        // defaultValueByIndex={1}
+                        // defaultValue={'England'}
+                        onSelect={(selectedItem, index) => {
+                        setWarehouseNo(selectedItem);
+                        }}
+                        defaultButtonText={'Depo Yeri'}
+                        buttonTextAfterSelection={(selectedItem, index) => {
+                        return selectedItem;
+                        }}
+                        rowTextForSelection={(item, index) => {
+                        return item;
+                        }}
+                        buttonStyle={styles.SelectButonStyle}
+                        buttonTextStyle={styles.SelectButonTxtStyle}
+                        renderDropdownIcon={isOpened => {
+                        return <FontAwesome name={isOpened ? 'chevron-up' : 'chevron-down'} color={'#6782B4'} size={18} />;
+                        }}
+                        dropdownIconPosition={'right'}
+                        dropdownStyle={styles.SelectDropdownStyle}
+                        rowStyle={styles.SelectRowStyle}
+                        rowTextStyle={styles.SelectRowTxtStyle}
+                    />
+                </View>
+                <View style={styles.View2Style}>
+                    <Text style={styles.TextStyle}>Değerleme Türü</Text>
+                    <SelectDropdown
+                        data={DegerlemeTuru}
+                        // defaultValueByIndex={1}
+                        // defaultValue={'England'}
+                        onSelect={(selectedItem, index) => {
+                        setValuationType(selectedItem);
+                        }}
+                        defaultButtonText={'Değerleme Türü'}
+                        buttonTextAfterSelection={(selectedItem, index) => {
+                        return selectedItem;
+                        }}
+                        rowTextForSelection={(item, index) => {
+                        return item;
+                        }}
+                        buttonStyle={styles.SelectButonStyle}
+                        buttonTextStyle={styles.SelectButonTxtStyle}
+                        renderDropdownIcon={isOpened => {
+                        return <FontAwesome name={isOpened ? 'chevron-up' : 'chevron-down'} color={'#6782B4'} size={18} />;
+                        }}
+                        dropdownIconPosition={'right'}
+                        dropdownStyle={styles.SelectDropdownStyle}
+                        rowStyle={styles.SelectRowStyle}
+                        rowTextStyle={styles.SelectRowTxtStyle}
+                    />
+                </View>
+            </View>
+            <View style={{...styles.View2Style,paddingTop:10, paddingBottom:10, borderBottomColor:"#6A93CB",borderBottomWidth:0.5,borderBottomStartRadius:30,borderBottomEndRadius:30}}>
+                <TouchableOpacity
+                      style={styles.SaveButton}
+                      onPress={() => saveButton()} //KAYDET BUTONU
+                      >
+                      <Text style={{...styles.TextStyle, color:"#FFFFFF",borderBottomColor:"#6A93CB",}}>Kaydet</Text>
+                </TouchableOpacity>
+            </View>
+            <ScrollView>
+            <View style={styles.ContainerViewStyle} >
+                    <TouchableOpacity 
+                        style={{
+                            height:130,
+                            width:"95%",
+                            flexDirection:"row",  
+                            backgroundColor:  "#1272a3",
+                            borderTopRightRadius: 10,
+                            borderTopLeftRadius: 10,
+                            borderBottomRightRadius:10,
+                            borderBottomLeftRadius:10,
+                        }} 
+                        onPress={()=>onPressStartedWorks()} >
+                        <View style={styles.OpacityMainViewStyle}>
+                            <View style={{flexDirection:"row"}}>
+                                <View style={{flexDirection:"column",paddingEnd:10}}>
+                                    <View  style={{flexDirection:"row",paddingTop:5}}>  
+                                        <Text style={styles.DefinitionTextStyle}>Malzeme No:</Text>
+                                        <Text style={styles.ParameterTextStyle} >123124123</Text>
+                                    </View>
+                                    <View  style={{flexDirection:"row",paddingTop:5}}>
+                                        <Text  style={styles.DefinitionTextStyle}>Kullanım Miktarı:</Text>
+                                        <Text style={styles.ParameterTextStyle} >123124123</Text>
+                                    </View>
+                                    <View  style={{flexDirection:"row",paddingTop:5}}>
+                                        <Text  style={styles.DefinitionTextStyle}>Malzeme Tanımı:</Text>
+                                        <Text>{warehouseNo}</Text>
+                                    </View>
+                                    <View  style={{flexDirection:"row",paddingTop:5}}>
+                                        <Text  style={styles.DefinitionTextStyle}>Birim:</Text>
+                                        <Text style={styles.ParameterTextStyle} >123124123</Text>
+                                    </View>
+                                </View>
+                                <View style={{flexDirection:"column"}}>
+                                    <View style={{flexDirection:"row",paddingTop:5}}>
+                                        <Text  style={styles.DefinitionTextStyle}>Stok Miktarı:</Text>
+                                        <Text style={styles.ParameterTextStyle} >123124123</Text>
+                                    </View>
+                                    <View style={{flexDirection:"row",paddingTop:5}}>
+                                        <Text  style={styles.DefinitionTextStyle}>Birim:</Text>
+                                        <Text style={styles.ParameterTextStyle} >123124123</Text>
+                                    </View>
+                                    <View style={{flexDirection:"row",paddingTop:5}}>
+                                        <Text  style={styles.DefinitionTextStyle}>Üretim Yeri:</Text>
+                                        <Text style={styles.ParameterTextStyle} >123124123</Text>
+                                    </View>
+                                    <View  style={{flexDirection:"row",paddingTop:5}}>
+                                        <Text  style={styles.DefinitionTextStyle}>Değerleme Türü:</Text>
+                                        <Text style={styles.ParameterTextStyle} >123124123</Text>
+                                    </View>
+                                </View>
+                            </View>
+                            <View style={{width:"100%", alignItems:"center"}}>
+                                    <Text>İPTAL</Text>
+                            </View>
+                        </View> 
+                    </TouchableOpacity>
+                </View>
+            </ScrollView>
         </View>
     );
 }
 export default MaterialConsumption
 const styles = StyleSheet.create({
-    shadow: {
-      shadowColor: '#000',
-      shadowOffset: {width: 0, height: 6},
-      shadowOpacity: 0.1,
-      shadowRadius: 10,
-      elevation: 10,
+    ContainerViewStyle:{
+        paddingTop:10,
+        alignItems:"center"
     },
-    header: {
-      flexDirection: 'row',
-      width,
-      height: 50,
-      alignItems: 'center',
-      justifyContent: 'center',
-      backgroundColor: '#F6F6F6',
+    OpacityMainViewStyle:{
+        flexDirection:"column", 
+        justifyContent:"space-between",
+        paddingLeft:5,
+        paddingRight:5
     },
-    headerTitle: {color: '#000', fontWeight: 'bold', fontSize: 16},
-    saveAreaViewContainer: {flex: 1, backgroundColor: '#FFF'},
-    viewContainer: {flex: 1, width, backgroundColor: '#FFF'},
-    scrollViewContainer: {
-      flexGrow: 1,
-      justifyContent: 'space-between',
-      alignItems: 'center',
-      paddingVertical: '10%',
-      paddingBottom: '20%',
+    View1Style:{
+        flexDirection:"row",
+        justifyContent:"space-evenly",
+        paddingTop:10,
     },
+    View2Style:{
+        flexDirection:"column",
+        alignItems:"center"
+    },
+    TextStyle:{
+        fontWeight:"bold",
+        borderBottomColor:"#A4BFEF",
+        borderBottomWidth:0.2,
+        borderBottomStartRadius:width/3,
+        borderBottomEndRadius:width/3,
+        paddingBottom:2
+    },
+    DefinitionTextStyle:{
+        fontWeight:"bold",
   
-    dropdown1BtnStyle: {
-      width: '80%',
-      height: 50,
-      backgroundColor: '#FFF',
-      borderRadius: 8,
-      borderWidth: 1,
-      borderColor: '#444',
     },
-    dropdown1BtnTxtStyle: {color: '#444', textAlign: 'left'},
-    dropdown1DropdownStyle: {backgroundColor: '#EFEFEF'},
-    dropdown1RowStyle: {backgroundColor: '#EFEFEF', borderBottomColor: '#C5C5C5'},
-    dropdown1RowTxtStyle: {color: '#444', textAlign: 'left'},
-  
-    dropdown2BtnStyle: {
-      width: '80%',
-      height: 50,
-      backgroundColor: '#444',
-      borderRadius: 8,
+    ParameterTextStyle:{
+        color:"#FFFFFF",
+        fontWeight:"bold"
     },
-    dropdown2BtnTxtStyle: {
-      color: '#FFF',
+    SelectButonStyle: {
+      width: width/3.2,
+      height: 50,
+      backgroundColor: '#FFFFFF',
+      borderRadius: 12,
+    },
+    SelectButonTxtStyle: {
+      color: '#000000',
       textAlign: 'center',
       fontWeight: 'bold',
     },
-    dropdown2DropdownStyle: {
-      backgroundColor: '#444',
+    SelectDropdownStyle: {
+      backgroundColor: 'red',
       borderBottomLeftRadius: 12,
       borderBottomRightRadius: 12,
+      borderRadius:15,
     },
-    dropdown2RowStyle: {backgroundColor: '#444', borderBottomColor: '#C5C5C5'},
-    dropdown2RowTxtStyle: {
-      color: '#FFF',
+    SelectRowStyle: {
+        backgroundColor:'#FFFFFF', 
+        borderBottomColor: '#C5C5C5'
+    },
+    SelectRowTxtStyle: {
+      color: '#000000',
       textAlign: 'center',
       fontWeight: 'bold',
     },
-  
-    dropdown3BtnStyle: {
-      width: '80%',
-      height: 50,
-      backgroundColor: '#FFF',
-      paddingHorizontal: 0,
-      borderWidth: 1,
-      borderRadius: 8,
-      borderColor: '#444',
-    },
-    dropdown3BtnChildStyle: {
-      flex: 1,
-      flexDirection: 'row',
-      justifyContent: 'space-between',
-      alignItems: 'center',
-      paddingHorizontal: 18,
-    },
-    dropdown3BtnImage: {width: 45, height: 45, resizeMode: 'cover'},
-    dropdown3BtnTxt: {
-      color: '#444',
-      textAlign: 'center',
-      fontWeight: 'bold',
-      fontSize: 24,
-      marginHorizontal: 12,
-    },
-    dropdown3DropdownStyle: {backgroundColor: 'slategray'},
-    dropdown3RowStyle: {
-      backgroundColor: 'slategray',
-      borderBottomColor: '#444',
-      height: 50,
-    },
-    dropdown3RowChildStyle: {
-      flex: 1,
-      flexDirection: 'row',
-      justifyContent: 'flex-start',
-      alignItems: 'center',
-      paddingHorizontal: 18,
-    },
-    dropdownRowImage: {width: 45, height: 45, resizeMode: 'cover'},
-    dropdown3RowTxt: {
-      color: '#F1F1F1',
-      textAlign: 'center',
-      fontWeight: 'bold',
-      fontSize: 24,
-      marginHorizontal: 12,
-    },
-  
-    dropdown4BtnStyle: {
-      width: '50%',
-      height: 50,
-      backgroundColor: '#FFF',
-      borderRadius: 8,
-      borderWidth: 1,
-      borderColor: '#444',
-    },
-    dropdown4BtnTxtStyle: {color: '#444', textAlign: 'left'},
-    dropdown4DropdownStyle: {backgroundColor: '#EFEFEF'},
-    dropdown4RowStyle: {backgroundColor: '#EFEFEF', borderBottomColor: '#C5C5C5'},
-    dropdown4RowTxtStyle: {color: '#444', textAlign: 'left'},
+    SaveButton:{
+      borderRadius: 20,
+      padding: 10,
+      elevation: 2,
+      width:width/3,
+      backgroundColor:"#6A93CB",
+      alignItems:"center"
+    }
   });
