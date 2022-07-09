@@ -6,7 +6,7 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
 const {width} = Dimensions.get('window');
-
+const {height} = Dimensions.get('window');
 const MaterialConsumption = (props) =>{
     const loginID=props.route.params.loginID;
     const password=props.route.params.password;
@@ -15,7 +15,7 @@ const MaterialConsumption = (props) =>{
     const [state,setState]=useState("");
     const [value,setValue]=useState("");
     const [materialNo,setMaterialNo] = useState("");
-    const [consumptionQuantity,setConsumptionQuantity] = useState("");
+    const [consumptionQuantity,setConsumptionQuantity] = useState(0);
     const [productionPlaceNo,setProductionPlaceNo] = useState("");
     const [warehouseNo,setWarehouseNo] = useState("");
     const [valuationType,setValuationType] = useState("");
@@ -28,20 +28,31 @@ const MaterialConsumption = (props) =>{
     const UretimYeri = ["1200", "1300", "1400", "1500"];
     const DepolamaYeri = ["1250", "1350", "1450", "1550"];
     var viewData = [];
-    var MaterialConsumptionData = [];
+    var MaterialConsumptionData = [
+        {
+        materialNo:"asdasdasd",
+        consumptionQuantity :"consumptionQuantity",
+        productionPlaceNo: "productionPlaceNo",
+        warehouseNo: "warehouseNo",
+        valuationType: "valuationType",
+        materialDefinition : "materialDefinition",
+        unit: "unit",
+        stock:"stock",
+        },
+    ];
     
     const saveButton = () =>{
         MaterialConsumptionData.push(
             {
-                "materialNo":materialNo,
-                "consumptionQuantity" :consumptionQuantity,
-                "productionPlaceNo": productionPlaceNo,
-                "warehouseNo": warehouseNo,
-                "valuationType": valuationType,
-                "materialDefinition" : materialDefinition,
-                "unit": unit,
-                "stock":stock,
-            }
+                materialNo:materialNo,
+                consumptionQuantity :consumptionQuantity,
+                productionPlaceNo: productionPlaceNo,
+                warehouseNo: warehouseNo,
+                valuationType: valuationType,
+                materialDefinition : materialDefinition,
+                unit: unit,
+                stock:stock,
+            },
         );
         setStock("");
         setUnit("");
@@ -49,36 +60,94 @@ const MaterialConsumption = (props) =>{
         setValuationType("");
         setWarehouseNo("");
         setProductionPlaceNo("");
-        setConsumptionQuantity("");
+        setConsumptionQuantity(0);
         setMaterialNo("");
     
+    }
+    const cancelMaterial = (i) =>{
+        delete viewData[i];
     }
     if(MaterialConsumptionData!=null){
         viewData=[];
         for(let i=0; i<MaterialConsumptionData.length; i++){
             viewData.push(
-                <View key={i} style={styles.container} >
+                <View key={i} style={styles.ContainerViewStyle} >
                     <TouchableOpacity 
                         style={{
-                            height:130,
-                            width:"95%",
+                            height:height/5,
+                            width:width,
                             flexDirection:"row",  
-                            backgroundColor: loginID==MaterialConsumptionData[i].SAPKullanici ? "#1272a3": "#71aac8",
+                            backgroundColor:  "#A4BFEF",
                             borderTopRightRadius: 10,
                             borderTopLeftRadius: 10,
                             borderBottomRightRadius:10,
                             borderBottomLeftRadius:10,
                         }} 
-                        onPress={()=>onPressStartedWorks()} >
-                        <View>
-                            <Text>Malzeme No:</Text>
-                            <Text style={styles.ParameterTextStyle} >123124123</Text>
-                        </View>
+                        onPress={()=>console.log()} >
+                        <View style={styles.OpacityMainViewStyle}>
+                            <View style={{flexDirection:"row"}}>
+                                <View style={{flexDirection:"column",paddingEnd:10}}>
+                                    <View  style={{flexDirection:"row",paddingTop:5}}>  
+                                        <Text style={styles.DefinitionTextStyle}>Malzeme No:</Text>
+                                        <Text style={styles.ParameterTextStyle} >{MaterialConsumptionData[i].materialNo}</Text>
+                                    </View>
+                                    <View  style={{flexDirection:"row",paddingTop:5}}>
+                                        <Text  style={styles.DefinitionTextStyle}>Kullanım Miktarı:</Text>
+                                        <Text style={styles.ParameterTextStyle} >{MaterialConsumptionData[i].consumptionQuantity}</Text>
+                                    </View>
+                                    <View  style={{flexDirection:"row",paddingTop:5}}>
+                                        <Text  style={styles.DefinitionTextStyle}>Malzeme Tanımı:</Text>
+                                        <Text style={styles.ParameterTextStyle}>{MaterialConsumptionData[i].materialDefinition}</Text>
+                                    </View>
+                                    <View  style={{flexDirection:"row",paddingTop:5}}>
+                                        <Text  style={styles.DefinitionTextStyle}>Birim:</Text>
+                                        <Text style={styles.ParameterTextStyle} >{MaterialConsumptionData[i].unit}</Text>
+                                    </View>
+                                </View>
+                                <View style={{flexDirection:"column"}}>
+                                    <View style={{flexDirection:"row",paddingTop:5}}>
+                                        <Text  style={styles.DefinitionTextStyle}>Stok Miktarı:</Text>
+                                        <Text style={styles.ParameterTextStyle} >{MaterialConsumptionData[i].stock}</Text>
+                                    </View>
+                                    <View style={{flexDirection:"row",paddingTop:5}}>
+                                        <Text  style={styles.DefinitionTextStyle}>Birim:</Text>
+                                        <Text style={styles.ParameterTextStyle} >{MaterialConsumptionData[i].unit}</Text>
+                                    </View>
+                                    <View style={{flexDirection:"row",paddingTop:5}}>
+                                        <Text  style={styles.DefinitionTextStyle}>Üretim Yeri:</Text>
+                                        <Text style={styles.ParameterTextStyle} >{MaterialConsumptionData[i].productionPlaceNo}</Text>
+                                    </View>
+                                    <View  style={{flexDirection:"row",paddingTop:5}}>
+                                        <Text  style={styles.DefinitionTextStyle}>Değerleme Türü:</Text>
+                                        <Text style={styles.ParameterTextStyle} >{MaterialConsumptionData[i].valuationType}</Text>
+                                    </View>
+                                </View>
+                            </View>
+                            <View style={{width:"100%", alignItems:"center"}}>
+                                <TouchableOpacity 
+                                    style={{
+                                        height:30,
+                                        width:width/5,
+                                        flexDirection:"row",  
+                                        backgroundColor:  "#6A93CB",
+                                        borderTopRightRadius: 10,
+                                        borderTopLeftRadius: 10,
+                                        borderBottomRightRadius:10,
+                                        borderBottomLeftRadius:10,
+                                        justifyContent:"center",
+                                        alignItems:"center",
+                                    }} 
+                                    onPress={(i)=>cancelMaterial(i)} >
+                                        <Text style={{fontWeight:"bold",color:"#FFFFFF"}}>İPTAL</Text>
+                                </TouchableOpacity>
+                            </View>
+                        </View> 
                     </TouchableOpacity>
                 </View>
             );
         }
     }
+    
      
     return(
         <View>
@@ -94,7 +163,7 @@ const MaterialConsumption = (props) =>{
                         }}
                         defaultButtonText={'Malzeme No'}
                         buttonTextAfterSelection={(selectedItem, index) => {
-                        return selectedItem;
+                        return materialNo;
                         }}
                         rowTextForSelection={(item, index) => {
                         return item;
@@ -113,7 +182,7 @@ const MaterialConsumption = (props) =>{
                 <View style={styles.View2Style}>
                     <Text style={styles.TextStyle}>Kullanım Miktarı</Text>
                     <NumericInput 
-                        value={value} 
+                        value={parseInt(value)} 
                         onChange={value => setConsumptionQuantity({value})} 
                         onLimitReached={(isMax,msg) => console.log(isMax,msg)}
                         totalWidth={width/2.5} 
@@ -240,64 +309,7 @@ const MaterialConsumption = (props) =>{
                 </TouchableOpacity>
             </View>
             <ScrollView>
-            <View style={styles.ContainerViewStyle} >
-                    <TouchableOpacity 
-                        style={{
-                            height:130,
-                            width:"95%",
-                            flexDirection:"row",  
-                            backgroundColor:  "#1272a3",
-                            borderTopRightRadius: 10,
-                            borderTopLeftRadius: 10,
-                            borderBottomRightRadius:10,
-                            borderBottomLeftRadius:10,
-                        }} 
-                        onPress={()=>onPressStartedWorks()} >
-                        <View style={styles.OpacityMainViewStyle}>
-                            <View style={{flexDirection:"row"}}>
-                                <View style={{flexDirection:"column",paddingEnd:10}}>
-                                    <View  style={{flexDirection:"row",paddingTop:5}}>  
-                                        <Text style={styles.DefinitionTextStyle}>Malzeme No:</Text>
-                                        <Text style={styles.ParameterTextStyle} >123124123</Text>
-                                    </View>
-                                    <View  style={{flexDirection:"row",paddingTop:5}}>
-                                        <Text  style={styles.DefinitionTextStyle}>Kullanım Miktarı:</Text>
-                                        <Text style={styles.ParameterTextStyle} >123124123</Text>
-                                    </View>
-                                    <View  style={{flexDirection:"row",paddingTop:5}}>
-                                        <Text  style={styles.DefinitionTextStyle}>Malzeme Tanımı:</Text>
-                                        <Text>{warehouseNo}</Text>
-                                    </View>
-                                    <View  style={{flexDirection:"row",paddingTop:5}}>
-                                        <Text  style={styles.DefinitionTextStyle}>Birim:</Text>
-                                        <Text style={styles.ParameterTextStyle} >123124123</Text>
-                                    </View>
-                                </View>
-                                <View style={{flexDirection:"column"}}>
-                                    <View style={{flexDirection:"row",paddingTop:5}}>
-                                        <Text  style={styles.DefinitionTextStyle}>Stok Miktarı:</Text>
-                                        <Text style={styles.ParameterTextStyle} >123124123</Text>
-                                    </View>
-                                    <View style={{flexDirection:"row",paddingTop:5}}>
-                                        <Text  style={styles.DefinitionTextStyle}>Birim:</Text>
-                                        <Text style={styles.ParameterTextStyle} >123124123</Text>
-                                    </View>
-                                    <View style={{flexDirection:"row",paddingTop:5}}>
-                                        <Text  style={styles.DefinitionTextStyle}>Üretim Yeri:</Text>
-                                        <Text style={styles.ParameterTextStyle} >123124123</Text>
-                                    </View>
-                                    <View  style={{flexDirection:"row",paddingTop:5}}>
-                                        <Text  style={styles.DefinitionTextStyle}>Değerleme Türü:</Text>
-                                        <Text style={styles.ParameterTextStyle} >123124123</Text>
-                                    </View>
-                                </View>
-                            </View>
-                            <View style={{width:"100%", alignItems:"center"}}>
-                                    <Text>İPTAL</Text>
-                            </View>
-                        </View> 
-                    </TouchableOpacity>
-                </View>
+              <Text>{viewData}</Text>  
             </ScrollView>
         </View>
     );
@@ -306,7 +318,8 @@ export default MaterialConsumption
 const styles = StyleSheet.create({
     ContainerViewStyle:{
         paddingTop:10,
-        alignItems:"center"
+        alignItems:"center",
+        width:width,
     },
     OpacityMainViewStyle:{
         flexDirection:"column", 
