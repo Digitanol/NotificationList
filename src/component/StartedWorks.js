@@ -83,6 +83,7 @@ const StartedWorks =(props) => {
       //arama butonu
       
     }
+    //Filter
     if(StartedWorksDummyData1.filter(x=>String(x.SAPKullanici).includes(searchUpper))[0]){
       FilterResult=[];
       FilterResult=StartedWorksDummyData1.filter(x=>String(x.SAPKullanici).includes(searchUpper));
@@ -100,7 +101,7 @@ const StartedWorks =(props) => {
         );
       }
     }  
-
+    //Main Data
     if(search != "" && StartedWorksDummyData2 != ""){
       dummydata=[];
       for (let i = 0; i < StartedWorksDummyData2.length; i++){
