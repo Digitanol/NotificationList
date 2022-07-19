@@ -1,5 +1,5 @@
-import {View, Text, SafeAreaView, StatusBar, Dimensions, StyleSheet, ScrollView, Image, TouchableOpacity} from 'react-native';
-import React, { useState } from 'react';
+import {View, Text, Alert, SafeAreaView, StatusBar, Dimensions, StyleSheet, ScrollView, Image, TouchableOpacity, RefreshControl} from 'react-native';
+import React, { useState,useEffect,useCallback } from 'react';
 import NumericInput from 'react-native-numeric-input';
 import SelectDropdown from 'react-native-select-dropdown';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
@@ -7,6 +7,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 
 const {width} = Dimensions.get('window');
 const {height} = Dimensions.get('window');
+
 const MaterialConsumption = (props) =>{
     const loginID=props.route.params.loginID;
     const password=props.route.params.password;
@@ -22,52 +23,62 @@ const MaterialConsumption = (props) =>{
     const [materialDefinition,setMaterialDefinition] = useState("MONITOR");
     const [unit,setUnit] = useState("ADT");
     const [stock,setStock] = useState("100");
-
+    const [refreshing, setRefreshing] = useState(false);
     const MalzemeNo = ["50003", "50004","50005","50006"] ;
     const DegerlemeTuru = ["YENİ", "ARIZALI", "TAMIRLI"];
     const UretimYeri = ["1200", "1300", "1400", "1500"];
     const DepolamaYeri = ["1250", "1350", "1450", "1550"];
+    const [MaterialConsumptionData,setMaterialConsumptionData] = useState([]);
     var viewData = [];
-    var MaterialConsumptionData = [
-        {
-        materialNo:"asdasdasd",
-        consumptionQuantity :"consumptionQuantity",
-        productionPlaceNo: "productionPlaceNo",
-        warehouseNo: "warehouseNo",
-        valuationType: "valuationType",
-        materialDefinition : "materialDefinition",
-        unit: "unit",
-        stock:"stock",
-        },
-    ];
-    
-    const saveButton = () =>{
-        MaterialConsumptionData.push(
-            {
-                materialNo:materialNo,
-                consumptionQuantity :consumptionQuantity,
-                productionPlaceNo: productionPlaceNo,
-                warehouseNo: warehouseNo,
-                valuationType: valuationType,
-                materialDefinition : materialDefinition,
-                unit: unit,
-                stock:stock,
-            },
-        );
-        setStock("");
-        setUnit("");
-        setMaterialDefinition("");
-        setValuationType("");
-        setWarehouseNo("");
-        setProductionPlaceNo("");
-        setConsumptionQuantity(0);
-        setMaterialNo("");
-    
-    }
+    const wait = (timeout) => {
+        return new Promise(resolve => setTimeout(resolve, timeout));
+      }
+    const onRefresh = useCallback(() => {
+        setRefreshing(true);
+        wait(200).then(() => setRefreshing(false));
+      }, []);
     const cancelMaterial = (i) =>{
-        delete viewData[i];
+        if(MaterialConsumptionData[i]!=null){
+             MaterialConsumptionData.splice(i,1);
+        }
+        onRefresh();
+    }  
+    const saveButton = () =>{
+        if(materialNo != "" && consumptionQuantity != 0 && productionPlaceNo != "" && warehouseNo != "" 
+            && valuationType != "" && materialDefinition != "" && unit != "" && stock != ""  ){ 
+            MaterialConsumptionData.push({
+                    materialNo:materialNo,
+                    consumptionQuantity :consumptionQuantity,
+                    productionPlaceNo: productionPlaceNo,
+                    warehouseNo: warehouseNo,
+                    valuationType: valuationType,
+                    materialDefinition : materialDefinition,
+                    unit: unit,
+                    stock: stock,
+                },);
+            setValuationType("");
+            setWarehouseNo("");
+            setProductionPlaceNo("");
+            setMaterialNo("");
+        }else{
+            Alert.alert(
+                "Dikkat",
+                "Boş alan bırakmayın",
+                [
+                  {
+                    text: "Cancel",
+                    onPress: () => console.log("Cancel Pressed"),
+                    style: "cancel"
+                  },
+                  { text: "OK", onPress: () => console.log("OK Pressed") }
+                ]
+              );
+        }
     }
-    if(MaterialConsumptionData!=null){
+
+    
+
+    if(MaterialConsumptionData!=null && MaterialConsumptionData[0] !=undefined ){
         viewData=[];
         for(let i=0; i<MaterialConsumptionData.length; i++){
             viewData.push(
@@ -75,7 +86,7 @@ const MaterialConsumption = (props) =>{
                     <TouchableOpacity 
                         style={{
                             height:height/5,
-                            width:width,
+                            width:width-20,
                             flexDirection:"row",  
                             backgroundColor:  "#A4BFEF",
                             borderTopRightRadius: 10,
@@ -137,7 +148,7 @@ const MaterialConsumption = (props) =>{
                                         justifyContent:"center",
                                         alignItems:"center",
                                     }} 
-                                    onPress={(i)=>cancelMaterial(i)} >
+                                    onPress={()=>cancelMaterial(i)} >
                                         <Text style={{fontWeight:"bold",color:"#FFFFFF"}}>İPTAL</Text>
                                 </TouchableOpacity>
                             </View>
@@ -147,8 +158,7 @@ const MaterialConsumption = (props) =>{
             );
         }
     }
-    
-     
+
     return(
         <View>
             <View style={styles.View1Style}>
@@ -183,7 +193,7 @@ const MaterialConsumption = (props) =>{
                     <Text style={styles.TextStyle}>Kullanım Miktarı</Text>
                     <NumericInput 
                         value={parseInt(value)} 
-                        onChange={value => setConsumptionQuantity({value})} 
+                        onChange={value => setConsumptionQuantity(value)} 
                         onLimitReached={(isMax,msg) => console.log(isMax,msg)}
                         totalWidth={width/2.5} 
                         totalHeight={45} 
@@ -229,7 +239,7 @@ const MaterialConsumption = (props) =>{
                         }}
                         defaultButtonText={'Üretim Yeri'}
                         buttonTextAfterSelection={(selectedItem, index) => {
-                        return selectedItem;
+                        return productionPlaceNo;
                         }}
                         rowTextForSelection={(item, index) => {
                         return item;
@@ -256,7 +266,7 @@ const MaterialConsumption = (props) =>{
                         }}
                         defaultButtonText={'Depo Yeri'}
                         buttonTextAfterSelection={(selectedItem, index) => {
-                        return selectedItem;
+                        return warehouseNo;
                         }}
                         rowTextForSelection={(item, index) => {
                         return item;
@@ -283,7 +293,7 @@ const MaterialConsumption = (props) =>{
                         }}
                         defaultButtonText={'Değerleme Türü'}
                         buttonTextAfterSelection={(selectedItem, index) => {
-                        return selectedItem;
+                        return valuationType;
                         }}
                         rowTextForSelection={(item, index) => {
                         return item;
@@ -308,8 +318,14 @@ const MaterialConsumption = (props) =>{
                       <Text style={{...styles.TextStyle, color:"#FFFFFF",borderBottomColor:"#6A93CB",}}>Kaydet</Text>
                 </TouchableOpacity>
             </View>
-            <ScrollView>
-              <Text>{viewData}</Text>  
+            <ScrollView style={styles.ScrollViewStyle} 
+                refreshControl={
+                    <RefreshControl
+                        refreshing={refreshing}
+                        onRefresh={onRefresh}
+                    />
+            }>
+              <Text>{viewData}</Text> 
             </ScrollView>
         </View>
     );
@@ -317,15 +333,19 @@ const MaterialConsumption = (props) =>{
 export default MaterialConsumption
 const styles = StyleSheet.create({
     ContainerViewStyle:{
-        paddingTop:10,
+        paddingBottom:5,
+        paddingTop:5,
         alignItems:"center",
-        width:width,
+        justifyContent:"center",
+        paddingRight:10,
+        
     },
     OpacityMainViewStyle:{
         flexDirection:"column", 
         justifyContent:"space-between",
         paddingLeft:5,
-        paddingRight:5
+        paddingRight:5,
+        width:width,
     },
     View1Style:{
         flexDirection:"row",
@@ -335,6 +355,11 @@ const styles = StyleSheet.create({
     View2Style:{
         flexDirection:"column",
         alignItems:"center"
+    },
+    ScrollViewStyle:{
+        height:height/1.75,
+        paddingLeft:10,
+        paddingRight:10,
     },
     TextStyle:{
         fontWeight:"bold",
