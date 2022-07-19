@@ -5,7 +5,9 @@ import { ScrollView } from 'react-native-gesture-handler';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import { SearchBar } from "react-native-elements";
-
+import SelectDropdown from 'react-native-select-dropdown';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import Feather from 'react-native-vector-icons/Feather';
 
 const width = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;
@@ -16,6 +18,7 @@ const StartedWorks =(props) => {
     var StartedWorksDummyData2=[];
     var StartedWorksDummyData1=StartedWorksDummyData;
     var FilterResult;
+    const breakReason = ["YENI", "MESAİ BİTİŞ", "MOLA", "MALZEME BEKLENİYOR", "PERSONEL BEKLENİYOR", "SERVİS BEKLENİYOR"];
     const loginID=props.route.params.loginID;
     const password=props.route.params.password;
     const [modalCall, setModalCall] = useState(false);
@@ -23,6 +26,8 @@ const StartedWorks =(props) => {
     const [modalBildirimNo,setModalBildirimNo]=useState("");
     const [search,setSearch]=useState("");
     const [searchUpper,setSearchUpper]=useState("");
+    const [modalTakeABreak,setModalTakeABreak]=useState(false);
+    const [takeABreakReason,setTakeABreakReason]=useState("");
     const onPressStartedWorks = (SAPKullanici,BildirimNo) =>{
         setModalSAPKullanici(SAPKullanici);
         setModalBildirimNo(BildirimNo);
@@ -41,6 +46,7 @@ const StartedWorks =(props) => {
     }   
     const takeABreak = () => {
         setModalCall(!modalCall);
+        setModalTakeABreak(!modalTakeABreak);
        //Ara ver Çalıştırılacak-SAP Kullanicisi, Bildirim No yukarıdaki modalSAPKUllanicisi ve ModalBildirim No dan çekilecek
     }
     const finishTheJob = () => {
@@ -326,6 +332,75 @@ const StartedWorks =(props) => {
                   </View>
               </View>
           </Modal>
+          <Modal
+            animationType="slide"
+            transparent={true}
+            visible={modalTakeABreak}
+            onRequestClose={() => {
+              Alert.alert(
+                "Emin Misiniz",
+                modalBildirimNo + " No'lu İşlemi kapatmaya emin misiniz? ",
+                [
+                  {
+                    text: "Cancel",
+                    onPress: () => setModalTakeABreak(modalTakeABreak),
+                    style: "cancel"
+                  },
+                  { text: "OK", onPress: () => setModalTakeABreak(!modalTakeABreak)}
+                ]
+              );
+              
+            }}
+          >
+            <View style={styles.centeredView}>
+              <View style={styles.modalTakeABreak}>
+                  <View style={{alignItems:"center"}}>
+                    <Text style={styles.modalTakeABreakText}> ARA VER</Text>
+                    <SelectDropdown
+                        data={breakReason}
+                        // defaultValueByIndex={1}
+                        // defaultValue={'England'}
+                        onSelect={(selectedItem, index) => {
+                        setTakeABreakReason(selectedItem);
+                        }}
+                        defaultButtonText={'ARA NEDENİ'}
+                        buttonTextAfterSelection={(selectedItem, index) => {
+                        return takeABreakReason;
+                        }}
+                        rowTextForSelection={(item, index) => {
+                        return item;
+                        }}
+                        buttonStyle={styles.SelectButonStyle}
+                        buttonTextStyle={styles.SelectButonTxtStyle}
+                        renderDropdownIcon={isOpened => {
+                        return <FontAwesome name={isOpened ? 'chevron-up' : 'chevron-down'} color={'#6782B4'} size={18} />;
+                        }}
+                        dropdownIconPosition={'right'}
+                        dropdownStyle={styles.SelectDropdownStyle}
+                        rowStyle={styles.SelectRowStyle}
+                        rowTextStyle={styles.SelectRowTxtStyle}
+                    />
+
+                  </View>
+                  <View style={{padding:10, flexDirection:"row", justifyContent:"space-evenly", width:"100%"}}>
+                      <TouchableOpacity
+                      style={styles.okey}
+                      onPress={() => setModalTakeABreak(!modalTakeABreak)} //işi devret buton
+                      >
+                      <FontAwesome name={'check'} color={'#1272a3'} size={18} />
+                      <Text style={{...styles.textStyle, color:"#1272a3"}}>Onayla</Text>
+                      </TouchableOpacity>
+                      <TouchableOpacity
+                      style={styles.cancel}
+                      onPress={() => setModalTakeABreak(!modalTakeABreak)} //işi devret buton
+                      >
+                        <Feather name={'x'} color={'red'} size={18} />
+                      <Text style={{...styles.textStyle, color:"red"}}>Kapat</Text>
+                      </TouchableOpacity>
+                  </View>
+              </View>
+            </View>
+          </Modal>
         </ScrollView>
       </View>
     );
@@ -387,6 +462,23 @@ const styles = StyleSheet.create({
       height:height/2,
       width:width/2,
     },
+    modalTakeABreak:{
+      margin: 10,
+      backgroundColor: "#3e7896",
+      borderRadius: 20,
+      justifyContent:"center",
+      alignItems: "center",
+      shadowColor: "#000",
+      shadowOffset: {
+        width: 0,
+        height: 2
+      },
+      shadowOpacity: 0.25,
+      shadowRadius: 4,
+      elevation: 5,
+      height:height/5,
+      width:width/1.5,
+    },
     button: {
       borderRadius: 20,
       padding:10,
@@ -420,5 +512,50 @@ const styles = StyleSheet.create({
       elevation: 2,
       width:width/4,
       backgroundColor:"white",
-    }
+      flexDirection:"row",
+      justifyContent: "space-evenly",
+      borderColor:"red",
+    },
+    okey: {
+      borderRadius: 20,
+      padding: 10,
+      elevation: 2,
+      width:width/4,
+      backgroundColor:"white",
+      flexDirection:"row",
+      justifyContent: "space-evenly",
+      
+    },
+    SelectDropdownStyle: {
+      backgroundColor: 'red',
+      borderBottomLeftRadius: 12,
+      borderBottomRightRadius: 12,
+      borderRadius:15,
+    },
+    SelectRowStyle: {
+        backgroundColor:'#FFFFFF', 
+        borderBottomColor: '#C5C5C5'
+    },
+    SelectRowTxtStyle: {
+      color: '#000000',
+      textAlign: 'center',
+      fontWeight: 'bold',
+    },
+    SelectButonStyle: {
+      width: "80%",
+      height: 50,
+      backgroundColor: '#FFFFFF',
+      borderRadius: 12,
+    },
+    SelectButonTxtStyle: {
+      color: '#000000',
+      textAlign: 'center',
+      fontWeight: 'bold',
+    },
+    modalTakeABreakText: {
+      fontWeight:"bold",
+      paddingBottom:5,
+      fontSize:15,
+      color:"white"
+    },
 });
