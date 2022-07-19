@@ -30,13 +30,14 @@ const MaterialConsumption = (props) =>{
     const DepolamaYeri = ["1250", "1350", "1450", "1550"];
     const [MaterialConsumptionData,setMaterialConsumptionData] = useState([]);
     var viewData = [];
+
     const wait = (timeout) => {
         return new Promise(resolve => setTimeout(resolve, timeout));
-      }
+    }
     const onRefresh = useCallback(() => {
         setRefreshing(true);
         wait(200).then(() => setRefreshing(false));
-      }, []);
+    }, []);
     const cancelMaterial = (i) =>{
         if(MaterialConsumptionData[i]!=null){
              MaterialConsumptionData.splice(i,1);
