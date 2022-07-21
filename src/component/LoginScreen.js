@@ -1,24 +1,24 @@
 
-import React, { useEffect, useState, useRef } from "react";
+import React,{ useEffect, useState, useRef } from "react";
 import { StyleSheet, Alert, Text, View, Image, TextInput ,TouchableOpacity, AppState} from "react-native";
 import { StatusBar } from "expo-status-bar";
-import AsyncStorage from "@react-native-community/async-storage";
+import * as SecureStore from 'expo-secure-store';
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import callWS from "../controller/callWS";
 
 const LoginScreen=({navigation}) => {
-    const [loginID, setloginID] = useState("");
-    const [password, setPassword] = useState("");
-
+    const [loginID, setloginID] = useState("XMBOZKIR");
+    const [password, setPassword] = useState("DigitANOL2019");
+   
+    AsyncStorage.multiSet([
+      ["loginID", loginID], ["password", password]
+    ])
     const loginButton = () => {
-     navigation.navigate("tabs", {loginID:loginID,password:password});
+      
+      navigation.navigate("tabs", {loginID:loginID,password:password});
     }
-   onsubmit = async ()=>{
-    try{
-      await AsyncStorage.setItem('LoginID',loginID);
-    } catch (error) {
-      console.log(error);
-    }
-   }
-
+    
+    
     return (
         <View style={styles.container}>
           <Image style={styles.image} source={require("../../assets/LOGO.png")} />

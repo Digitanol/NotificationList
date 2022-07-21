@@ -1,22 +1,39 @@
-import React, {useState} from "react";
-import { StyleSheet, Alert, Text, View, Image, TextInput ,TouchableOpacity,Dimensions} from "react-native";
+import React, {useState, useEffect} from "react";
+import { StyleSheet, Alert, Text, View, Image, TextInput ,TouchableOpacity, Dimensions, ActivityIndicator} from "react-native";
 import {OpenWorksDummyData} from "../../data/data";
 import { ScrollView } from 'react-native-gesture-handler';
 import { SearchBar } from "react-native-elements";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import callWS from "../controller/callWS";
+
 const width = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;
 
-const OpenWorks =(props) => {
-    
-    var dummydata=[];
+const OpenWorks = (props) => {
     var dummydata=[];
     var OpenWorksDummyData2=[];
     var OpenWorksDummyData1=OpenWorksDummyData;
     var FilterResult;
+    var params = ["tr"];
+    const [isLoading,setIsLoading]=useState(true);
     const loginID=props.route.params.loginID;
     const password=props.route.params.password;
     const [search,setSearch]=useState("");
     const [searchUpper,setSearchUpper]=useState("");
+    var openWorksData;
+    callWS("http","172.20.10.174","50000","MOBILE_PM/GettingOperation/getNotificationList/getNotificationListXqry",loginID,password,params)
+    .then(function(data){
+      console.log(data);
+      setIsLoading(false);
+    });
+    
+    AsyncStorage.multiGet(['loginID', 'password']).then((data) => {
+      let loginID = data[0][1];
+      let password = data[1][1];
+  
+      if (loginID != null){
+      }    
+    });
     const takeOnTheJob = (BildirimNo,Bildiren) =>{
       Alert.alert(
         "Emin Misiniz",
@@ -34,7 +51,7 @@ const OpenWorks =(props) => {
     const onSearch = (search) =>{
       setSearchUpper(search.toUpperCase());
       setSearch(search);
-      
+    
     }
     if(OpenWorksDummyData1.filter(x=>String(x.Bildiren).includes(searchUpper))[0]){
       FilterResult=[];
@@ -168,7 +185,13 @@ const OpenWorks =(props) => {
           value={search}
         />
         <ScrollView style={styles.scrollViewStyle}>
-          <Text>{dummydata}</Text>
+          { 
+            isLoading ? 
+            <ActivityIndicator 
+              style={{ height: 80,justifyContent:"center", alignItems:"center" }} 
+              color="green"
+              size="large"/> : <Text>{dummydata}</Text>
+          }
         </ScrollView>
       </View>
     );
