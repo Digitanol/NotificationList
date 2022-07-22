@@ -1,6 +1,4 @@
-
-
-const callWS = (protocol, hostName, port, trnsPath, userName, password, params) => {
+const callWS = async (protocol, hostName, port, trnsPath, userName, password, params) => {
     var paramString = "";
    
     for (let index = 0; index < params.length; index++) {

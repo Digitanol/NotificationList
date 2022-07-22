@@ -1,6 +1,6 @@
-import React, {useEffect, useState} from "react";
-import { StyleSheet, Alert, Text, View, Image, TextInput ,TouchableOpacity, Dimensions, Modal} from "react-native";
-import {StartedWorksDummyData} from "../../data/data";
+import React, { useEffect, useState } from "react";
+import { ActivityIndicator, StyleSheet, Alert, Text, View, Image, TextInput ,TouchableOpacity, Dimensions, Modal} from "react-native";
+import { StartedWorksDummyData } from "../../data/data";
 import { ScrollView } from 'react-native-gesture-handler';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
@@ -28,6 +28,12 @@ const StartedWorks =(props) => {
     const [searchUpper,setSearchUpper]=useState("");
     const [modalTakeABreak,setModalTakeABreak]=useState(false);
     const [takeABreakReason,setTakeABreakReason]=useState("");
+    const [isLoading,setIsLoading]=useState(false);
+    /* callWS("http","172.20.10.174","50000","MOBILE_PM/GettingOperation/getNotificationList/getNotificationListXqry",loginID,password,params)
+    .then(function(data){
+      console.log(data);
+      setIsLoading(false);
+    }); */
     const onPressStartedWorks = (SAPKullanici,BildirimNo) =>{
         setModalSAPKullanici(SAPKullanici);
         setModalBildirimNo(BildirimNo);
@@ -220,7 +226,13 @@ const StartedWorks =(props) => {
               value={search}
         />
         <ScrollView style={styles.scrollViewStyle}>
-          <Text>{dummydata}</Text>
+        { 
+            isLoading ? 
+            <ActivityIndicator 
+              style={{ height: 80,justifyContent:"center", alignItems:"center" }} 
+              color="#e33939"
+              size="large"/> : <Text>{dummydata}</Text>
+        }
           <Modal
               animationType="slide"
               transparent={true}
@@ -247,21 +259,7 @@ const StartedWorks =(props) => {
                   <View style={{padding:10}}>
                       <TouchableOpacity
                       style={[styles.button, styles.buttonClose]}
-                      onPress={() => {
-                          Alert.alert(
-                          "Emin Misiniz",
-                          modalBildirimNo + " No'lu İş için ara vermeye emin misiniz? ",
-                          [
-                              {
-                              text: "Cancel",
-                              onPress: () => setModalCall(modalCall),
-                              style: "cancel"
-                              },
-                              { text: "OK", onPress: () => takeABreak()}
-                          ]
-                          );
-                          
-                      }} //Ara Ver
+                      onPress={() => { takeABreak() }} //Ara Ver
                       >
                       <MaterialCommunityIcons name="cog-pause" color="white" size={25}/>
                       <Text style={styles.textStyle}>Ara Ver</Text>
@@ -356,6 +354,7 @@ const StartedWorks =(props) => {
             <View style={styles.centeredView}>
               <View style={styles.modalTakeABreak}>
                   <View style={{alignItems:"center"}}>
+                    <Text style={styles.modalTakeABreakText}>{modalSAPKullanici}-{modalBildirimNo}</Text>
                     <Text style={styles.modalTakeABreakText}> ARA VER</Text>
                     <SelectDropdown
                         data={breakReason}
@@ -477,7 +476,7 @@ const styles = StyleSheet.create({
       shadowOpacity: 0.25,
       shadowRadius: 4,
       elevation: 5,
-      height:height/5,
+      height:height/4,
       width:width/1.5,
     },
     button: {

@@ -20,7 +20,7 @@ const OpenWorks = (props) => {
     const password=props.route.params.password;
     const [search,setSearch]=useState("");
     const [searchUpper,setSearchUpper]=useState("");
-    var openWorksData;
+    
     callWS("http","172.20.10.174","50000","MOBILE_PM/GettingOperation/getNotificationList/getNotificationListXqry",loginID,password,params)
     .then(function(data){
       console.log(data);
@@ -189,7 +189,7 @@ const OpenWorks = (props) => {
             isLoading ? 
             <ActivityIndicator 
               style={{ height: 80,justifyContent:"center", alignItems:"center" }} 
-              color="green"
+              color="#e33939"
               size="large"/> : <Text>{dummydata}</Text>
           }
         </ScrollView>

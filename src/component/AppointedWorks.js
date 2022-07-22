@@ -1,5 +1,5 @@
 import React, {useState} from "react";
-import { StyleSheet, Alert, Text, View, Image, TextInput, TouchableOpacity, AppState, Dimensions, Modal} from "react-native";
+import {ActivityIndicator, StyleSheet, Alert, Text, View, Image, TextInput, TouchableOpacity, AppState, Dimensions, Modal} from "react-native";
 import {AppointedWorksDummyData} from "../../data/data";
 import { ScrollView } from 'react-native-gesture-handler';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -22,7 +22,12 @@ const AppointedWorks = (props) => {
     const [modalBildirimNo,setModalBildirimNo]=useState("");
     const [search,setSearch]=useState("");
     const [searchUpper,setSearchUpper]=useState("");
-
+    const [isLoading,setIsLoading]=useState(false);
+   /* callWS("http","172.20.10.174","50000","MOBILE_PM/GettingOperation/getNotificationList/getNotificationListXqry",loginID,password,params)
+    .then(function(data){
+      console.log(data);
+      setIsLoading(false);
+    });*/
     const startTheWork = (TayinOlan,BildirimNo) => {
       setModalTayinOlan(TayinOlan);
       setModalBildirimNo(BildirimNo);
@@ -214,7 +219,13 @@ const AppointedWorks = (props) => {
               value={search}
         />
         <ScrollView style={styles.scrollViewStyle}>
-          <Text>{dummydata}</Text>
+        { 
+            isLoading ? 
+            <ActivityIndicator 
+              style={{ height: 80,justifyContent:"center", alignItems:"center" }} 
+              color="#e33939"
+              size="large"/> : <Text>{dummydata}</Text>
+        }
           <Modal
             animationType="slide"
             transparent={true}

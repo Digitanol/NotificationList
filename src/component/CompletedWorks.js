@@ -1,5 +1,5 @@
 import React, {useState} from "react";
-import { StyleSheet, Alert, Text, View, Image, TextInput ,TouchableOpacity, Dimensions} from "react-native";
+import { ActivityIndicator, StyleSheet, Alert, Text, View, Image, TextInput ,TouchableOpacity, Dimensions} from "react-native";
 import { ScrollView } from 'react-native-gesture-handler';
 import {CompletedWorksDummyData} from "../../data/data";
 import { SearchBar } from "react-native-elements";
@@ -16,13 +16,13 @@ const CompletedWorks =(props) => {
     const password=props.route.params.password;
     const [search,setSearch]=useState("");
     const [searchUpper,setSearchUpper]=useState("");
+    const [isLoading,setIsLoading]=useState(false);
 
     const onSearch = (search) =>{
       setSearch(search);
       setSearchUpper(search.toUpperCase())
       //search field
     }
-
     if(CompletedWorksDummyData1.filter(x=>String(x.Bildiren).includes(searchUpper))[0]){
       FilterResult=[];
       FilterResult=CompletedWorksDummyData1.filter(x=>String(x.Bildiren).includes(searchUpper));
@@ -39,8 +39,7 @@ const CompletedWorks =(props) => {
           FilterResult[i]
         );
       }
-    }  
-
+    }
     if(search != "" && CompletedWorksDummyData2 != ""){
       dummydata=[];
       for (let i = 0; i < CompletedWorksDummyData2.length; i++){
@@ -166,7 +165,13 @@ const CompletedWorks =(props) => {
           value={search}
         />
         <ScrollView style={styles.scrollViewStyle}>
-          <Text>{dummydata}</Text>
+        { 
+            isLoading ? 
+            <ActivityIndicator 
+              style={{ height: 80,justifyContent:"center", alignItems:"center" }} 
+              color="#e33939"
+              size="large"/> : <Text>{dummydata}</Text>
+        }
         </ScrollView>
       </View>
         
