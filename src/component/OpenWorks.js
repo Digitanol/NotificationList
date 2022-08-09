@@ -6,38 +6,61 @@ import { SearchBar } from "react-native-elements";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import callWS from "../controller/callWS";
 
+
 const width = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;
 
 const OpenWorks = (props) => {
-    var dummydata=[];
+ 
+    var viewData=[];
     var OpenWorksDummyData2=[];
     var OpenWorksDummyData1=OpenWorksDummyData;
     var FilterResult;
-    var params = ["tr"];
+    var params = [];
     const [isLoading,setIsLoading]=useState(true);
     const loginID=props.route.params.loginID;
     const password=props.route.params.password;
     const [search,setSearch]=useState("");
     const [searchUpper,setSearchUpper]=useState("");
-    
-    callWS("http","172.20.10.174","50000","MOBILE_PM/GettingOperation/getNotificationList/getNotificationListXqry",loginID,password,params)
-    .then(function(data){
+    const [trnsPath, setTrnsPath]=useState("MOBILE_PM/UI/NotificationList/OpenWorks/getOpenWorksListXqry");
+    const [openWorksData,setOpenWorksData]=useState([]);
+
+  if(isLoading){
+    callWS("http","172.20.10.174","50000",trnsPath ,loginID,password,params)
+    .then((data)=>{
+      setOpenWorksData(data);
       console.log(data);
       setIsLoading(false);
     });
-    
-    AsyncStorage.multiGet(['loginID', 'password']).then((data) => {
-      let loginID = data[0][1];
-      let password = data[1][1];
+  }
+   
   
-      if (loginID != null){
-      }    
-    });
-    const takeOnTheJob = (BildirimNo,Bildiren) =>{
+  
+ 
+    const takeOnTheJob = (i) =>{
+      var paramsTakeOnTheJob=[];  
+      if(search != null && OpenWorksDummyData2 != null){
+        paramsTakeOnTheJob.push(openWorksData[i].QMDAT+" "+openWorksData[i].MZEIT)
+        paramsTakeOnTheJob.push(openWorksData[i].QMCOD)
+        paramsTakeOnTheJob.push(openWorksData[i].QMTXT)
+        paramsTakeOnTheJob.push(openWorksData[i].QMNAM)
+        paramsTakeOnTheJob.push(openWorksData[i].QMNUM)
+        paramsTakeOnTheJob.push(openWorksData[i].EQTXT)
+        paramsTakeOnTheJob.push(openWorksData[i].PLTXT)
+      }
+      if(search==null){
+        paramsTakeOnTheJob.push(openWorksData[i].QMDAT+" "+openWorksData[i].MZEIT)
+        paramsTakeOnTheJob.push(openWorksData[i].QMCOD)
+        paramsTakeOnTheJob.push(openWorksData[i].QMTXT)
+        paramsTakeOnTheJob.push(openWorksData[i].QMNAM)
+        paramsTakeOnTheJob.push(openWorksData[i].QMNUM)
+        paramsTakeOnTheJob.push(openWorksData[i].EQTXT)
+        paramsTakeOnTheJob.push(openWorksData[i].PLTXT)
+      }
+      //paramsTakeOnTheJob=[ArizaBaslangic,ArizaKodu....]
       Alert.alert(
         "Emin Misiniz",
-        BildirimNo+" Numaralı işi üzerinize alıyosunuz!",
+        paramsTakeOnTheJob[4]+" Numaralı işi üzerinize alıyosunuz!",
         [
           {
             text: "Cancel",
@@ -53,68 +76,68 @@ const OpenWorks = (props) => {
       setSearch(search);
     
     }
-    if(OpenWorksDummyData1.filter(x=>String(x.Bildiren).includes(searchUpper))[0]){
+    if(openWorksData.filter(x=>String(x.QMNAM).includes(searchUpper))[0]){
       FilterResult=[];
-      FilterResult=OpenWorksDummyData1.filter(x=>String(x.Bildiren).includes(searchUpper));
-      for (let i = 0; i < OpenWorksDummyData1.filter(x => String(x.Bildiren).includes(searchUpper)).length; i++){
+      FilterResult=openWorksData.filter(x=>String(x.QMNAM).includes(searchUpper));
+      for (let i = 0; i < openWorksData.filter(x => String(x.QMNAM).includes(searchUpper)).length; i++){
         OpenWorksDummyData2.push(
           FilterResult[i]
         );
       }
     }else{
       FilterResult=[];
-      FilterResult=OpenWorksDummyData1.filter(x => String(x.BildirimNo).includes(search));
-      for (let i = 0; i < OpenWorksDummyData1.filter(x => String(x.BildirimNo).includes(search)).length; i++){
+      FilterResult=openWorksData.filter(x => String(x.QMNUM).includes(search));
+      for (let i = 0; i < openWorksData.filter(x => String(x.QMNUM).includes(search)).length; i++){
         OpenWorksDummyData2.push(
           FilterResult[i]
         );
       }
     }
     if(search==null){
-      for (let i = 0; i < OpenWorksDummyData1.length; i++){
-        dummydata.push(
+      for (let i = 0; i < openWorksData.length; i++){
+        viewData.push(
           <View key={i} style={styles.container} >
             <TouchableOpacity 
               style={{
                   height:130,
                   width:"95%",
                   flexDirection:"row",  
-                  backgroundColor: OpenWorksDummyData1[i].BildirimNo %1 ==0 ? "#FA7E5E" : "#FA7E5E",
+                  backgroundColor: openWorksData[i].QMNUM %1 ==0 ? "#FA7E5E" : "#FA7E5E",
                   borderTopRightRadius: 10,
                   borderTopLeftRadius: 10,
                   borderBottomRightRadius:10,
                   borderBottomLeftRadius:10,}} 
-                  onPress={()=>takeOnTheJob(OpenWorksDummyData1[i].BildirimNo, OpenWorksDummyData1[i].Bildiren)} >
+                  onPress={()=>takeOnTheJob(i)} >
               <View style={styles.ViewStyle1} >
                 <Text style={{fontWeight:"bold", fontSize:13, color:"black"}}>
                   BildirimNo:
                 </Text>
                 <Text style={{fontWeight:"bold", fontSize:12, color:"white"}}>
-                  {OpenWorksDummyData1[i].BildirimNo}
+                  {openWorksData[i].QMNUM}
                 </Text>
                   <Text style={{fontSize:13, fontWeight:"bold" , color:"black"}}>Bildiren:</Text>
-                  <Text style={{fontSize:12, fontWeight:"bold", color:"white"}}>{OpenWorksDummyData1[i].Bildiren}</Text>
+                  <Text style={{fontSize:12, fontWeight:"bold", color:"white"}}>{openWorksData[i].QMNAM}</Text>
               </View>
               <View style={styles.ViewStyle2}>
                 <View style={{flexDirection:"row"}}>
                   <Text style={{fontSize:12, fontWeight:"bold"}}>Tenik Birim Tanımı: </Text>
-                  <Text style={{fontSize:12, fontWeight:"bold",color:"white"}}>{OpenWorksDummyData1[i].TeknikBirimTanimi}</Text>
+                  <Text style={{fontSize:12, fontWeight:"bold",color:"white"}}>{openWorksData[i].PLTXT}</Text>
                 </View>
                 <View style={{flexDirection:"row"}}>
                   <Text style={{fontSize:12, fontWeight:"bold"}}>Arıza Kodu: </Text>
-                  <Text style={{fontSize:12, fontWeight:"bold",color:"white"}}>{OpenWorksDummyData1[i].ArizaKodu} </Text>
+                  <Text style={{fontSize:12, fontWeight:"bold",color:"white"}}>{openWorksData[i].QMCOD} </Text>
                 </View>
                 <View style={{flexDirection:"row"}}>
                   <Text style={{fontSize:12, fontWeight:"bold"}}>Ekipman Tanımı: </Text>
-                  <Text style={{fontSize:12, fontWeight:"bold",color:"white"}}>{OpenWorksDummyData1[i].EkipmanTanimi} </Text>
+                  <Text style={{fontSize:12, fontWeight:"bold",color:"white"}}>{openWorksData[i].EQTXT} </Text>
                 </View>
                 <View style={{flexDirection:"row"}}>
                   <Text style={{fontSize:12, fontWeight:"bold"}}>Arıza Bildirim Açıklaması: </Text>
-                  <Text style={{fontSize:12, fontWeight:"bold",color:"white"}}>{OpenWorksDummyData1[i].ArizaKoduKisaAciklama}</Text>
+                  <Text style={{fontSize:12, fontWeight:"bold",color:"white"}}>{openWorksData[i].QMTXT}</Text>
                 </View>
                 <View style={{flexDirection:"row"}}>
                   <Text style={{fontSize:12, fontWeight:"bold"}}>Bildirim Tarihi: </Text>
-                  <Text style={{fontSize:12, fontWeight:"bold",color:"white"}}>{OpenWorksDummyData1[i].ArizaBaslangic}</Text>
+                  <Text style={{fontSize:12, fontWeight:"bold",color:"white"}}>{openWorksData[i].QMDAT+" "+openWorksData[i].MZEIT}</Text>
                 </View>
               </View>        
             </TouchableOpacity>
@@ -124,7 +147,7 @@ const OpenWorks = (props) => {
     }
     if(search != null && OpenWorksDummyData2 != null){
       for (let i = 0; i < OpenWorksDummyData2.length; i++){
-        dummydata.push(
+        viewData.push(
           <View key={i} style={styles.container} >
             <TouchableOpacity 
               style={{
@@ -136,7 +159,7 @@ const OpenWorks = (props) => {
                   borderTopLeftRadius: 10,
                   borderBottomRightRadius:10,
                   borderBottomLeftRadius:10,}} 
-                  onPress={()=>takeOnTheJob(OpenWorksDummyData2[i].BildirimNo, OpenWorksDummyData2[i].Bildiren)} >
+                  onPress={()=>takeOnTheJob(i)} >
               <View style={styles.ViewStyle1} >
                 <Text style={{fontWeight:"bold", fontSize:13, color:"black"}}>
                   BildirimNo:
@@ -190,7 +213,7 @@ const OpenWorks = (props) => {
             <ActivityIndicator 
               style={{ height: 80,justifyContent:"center", alignItems:"center" }} 
               color="#e33939"
-              size="large"/> : <Text>{dummydata}</Text>
+              size="large"/> : <Text>{viewData}</Text>
           }
         </ScrollView>
       </View>
