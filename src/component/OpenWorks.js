@@ -13,7 +13,7 @@ const height = Dimensions.get('window').height;
 const OpenWorks = (props) => {
  
     var viewData=[];
-    var OpenWorksDummyData2=[];
+    var openWorksAfterSearchData=[];
     var OpenWorksDummyData1=OpenWorksDummyData;
     var FilterResult;
     var params = [];
@@ -24,50 +24,63 @@ const OpenWorks = (props) => {
     const [searchUpper,setSearchUpper]=useState("");
     const [trnsPath, setTrnsPath]=useState("MOBILE_PM/UI/NotificationList/OpenWorks/getOpenWorksListXqry");
     const [openWorksData,setOpenWorksData]=useState([]);
-
+   
   if(isLoading){
     callWS("http","172.20.10.174","50000",trnsPath ,loginID,password,params)
     .then((data)=>{
-      setOpenWorksData(data);
-      console.log(data);
+      setOpenWorksData(data); 
       setIsLoading(false);
+      console.log(data);
     });
   }
-   
-  
-  
- 
+
     const takeOnTheJob = (i) =>{
       var paramsTakeOnTheJob=[];  
-      if(search != null && OpenWorksDummyData2 != null){
-        paramsTakeOnTheJob.push(openWorksData[i].QMDAT+" "+openWorksData[i].MZEIT)
-        paramsTakeOnTheJob.push(openWorksData[i].QMCOD)
-        paramsTakeOnTheJob.push(openWorksData[i].QMTXT)
-        paramsTakeOnTheJob.push(openWorksData[i].QMNAM)
-        paramsTakeOnTheJob.push(openWorksData[i].QMNUM)
-        paramsTakeOnTheJob.push(openWorksData[i].EQTXT)
+      if(search != null && openWorksAfterSearchData != null){
+        paramsTakeOnTheJob.push(openWorksData[i].ARBPLWERK)
+        paramsTakeOnTheJob.push("")
+        paramsTakeOnTheJob.push(openWorksData[i].EQUNR)
+        paramsTakeOnTheJob.push(openWorksData[i].EQKTX)
+        paramsTakeOnTheJob.push(openWorksData[i].TPLNR)
         paramsTakeOnTheJob.push(openWorksData[i].PLTXT)
+        paramsTakeOnTheJob.push(openWorksData[i].AUFNR)
+        paramsTakeOnTheJob.push(openWorksData[i].QMNUM)
+        paramsTakeOnTheJob.push(openWorksData[i].QMNAM)
+        paramsTakeOnTheJob.push(openWorksData[i].QMART)
+        paramsTakeOnTheJob.push(openWorksData[i].MZEIT.substring(0,2)+":"+openWorksData[i].MZEIT.substring(2,4)+":"+openWorksData[i].MZEIT.substring(4,6))
+        paramsTakeOnTheJob.push(openWorksData[i].QMDAT.substring(0,4)+"-"+openWorksData[i].QMDAT.substring(4,6)+"-"+openWorksData[i].QMDAT.substring(6,8))
       }
       if(search==null){
-        paramsTakeOnTheJob.push(openWorksData[i].QMDAT+" "+openWorksData[i].MZEIT)
-        paramsTakeOnTheJob.push(openWorksData[i].QMCOD)
-        paramsTakeOnTheJob.push(openWorksData[i].QMTXT)
-        paramsTakeOnTheJob.push(openWorksData[i].QMNAM)
-        paramsTakeOnTheJob.push(openWorksData[i].QMNUM)
-        paramsTakeOnTheJob.push(openWorksData[i].EQTXT)
+        paramsTakeOnTheJob.push(openWorksData[i].ARBPLWERK)
+        paramsTakeOnTheJob.push("")
+        paramsTakeOnTheJob.push(openWorksData[i].EQUNR)
+        paramsTakeOnTheJob.push(openWorksData[i].EQKTX)
+        paramsTakeOnTheJob.push(openWorksData[i].TPLNR)
         paramsTakeOnTheJob.push(openWorksData[i].PLTXT)
+        paramsTakeOnTheJob.push(openWorksData[i].AUFNR)
+        paramsTakeOnTheJob.push(openWorksData[i].QMNUM)
+        paramsTakeOnTheJob.push(openWorksData[i].QMNAM)
+        paramsTakeOnTheJob.push(openWorksData[i].QMART)
+        paramsTakeOnTheJob.push(openWorksData[i].MZEIT.substring(0,2)+":"+openWorksData[i].MZEIT.substring(2,4)+":"+openWorksData[i].MZEIT.substring(4,6))
+        paramsTakeOnTheJob.push(openWorksData[i].QMDAT.substring(0,4)+"-"+openWorksData[i].QMDAT.substring(4,6)+"-"+openWorksData[i].QMDAT.substring(6,8))
       }
       //paramsTakeOnTheJob=[ArizaBaslangic,ArizaKodu....]
       Alert.alert(
         "Emin Misiniz",
-        paramsTakeOnTheJob[4]+" Numaralı işi üzerinize alıyosunuz!",
+        paramsTakeOnTheJob[7]+" Numaralı işi üzerinize alıyosunuz!",
         [
           {
             text: "Cancel",
             onPress: () => console.log("Cancel Pressed"),
             style: "cancel"
           },
-          { text: "OK", onPress: () => console.log("OK Pressed") }
+          { text: "OK", onPress: () => callWS("http","172.20.10.174","50000","MOBILE_PM/UI/NotificationList/OpenWorks/insNotifTableXqry" ,loginID,password,paramsTakeOnTheJob)
+                                                .then((data)=>{
+                                                          setOpenWorksData(data); 
+                                                          setIsLoading(false);
+                                                          console.log(data);
+                                                    }) 
+          }
         ]
       );
     };
@@ -80,7 +93,7 @@ const OpenWorks = (props) => {
       FilterResult=[];
       FilterResult=openWorksData.filter(x=>String(x.QMNAM).includes(searchUpper));
       for (let i = 0; i < openWorksData.filter(x => String(x.QMNAM).includes(searchUpper)).length; i++){
-        OpenWorksDummyData2.push(
+        openWorksAfterSearchData.push(
           FilterResult[i]
         );
       }
@@ -88,12 +101,12 @@ const OpenWorks = (props) => {
       FilterResult=[];
       FilterResult=openWorksData.filter(x => String(x.QMNUM).includes(search));
       for (let i = 0; i < openWorksData.filter(x => String(x.QMNUM).includes(search)).length; i++){
-        OpenWorksDummyData2.push(
+        openWorksAfterSearchData.push(
           FilterResult[i]
         );
       }
     }
-    if(search==null){
+    if(search==null && openWorksData!=null){
       for (let i = 0; i < openWorksData.length; i++){
         viewData.push(
           <View key={i} style={styles.container} >
@@ -137,7 +150,7 @@ const OpenWorks = (props) => {
                 </View>
                 <View style={{flexDirection:"row"}}>
                   <Text style={{fontSize:12, fontWeight:"bold"}}>Bildirim Tarihi: </Text>
-                  <Text style={{fontSize:12, fontWeight:"bold",color:"white"}}>{openWorksData[i].QMDAT+" "+openWorksData[i].MZEIT}</Text>
+                  <Text style={{fontSize:12, fontWeight:"bold",color:"white"}}>{openWorksData[i].QMDAT.substring(0,4)+"-"+openWorksData[i].QMDAT.substring(4,6)+"-"+openWorksData[i].QMDAT.substring(6,8) +" "+openWorksData[i].MZEIT.substring(0,2)+":"+openWorksData[i].MZEIT.substring(2,4)+":"+openWorksData[i].MZEIT.substring(4,6)}</Text>
                 </View>
               </View>        
             </TouchableOpacity>
@@ -145,8 +158,8 @@ const OpenWorks = (props) => {
         );
       }
     }
-    if(search != null && OpenWorksDummyData2 != null){
-      for (let i = 0; i < OpenWorksDummyData2.length; i++){
+    if(search != null && openWorksAfterSearchData != null){
+      for (let i = 0; i < openWorksAfterSearchData.length; i++){
         viewData.push(
           <View key={i} style={styles.container} >
             <TouchableOpacity 
@@ -154,7 +167,7 @@ const OpenWorks = (props) => {
                   height:130,
                   width:"95%",
                   flexDirection:"row",  
-                  backgroundColor: OpenWorksDummyData2[i].BildirimNo %1 ==0 ? "#FA7E5E" : "#FA7E5E",
+                  backgroundColor: openWorksAfterSearchData[i].QNUM %1 ==0 ? "#FA7E5E" : "#FA7E5E",
                   borderTopRightRadius: 10,
                   borderTopLeftRadius: 10,
                   borderBottomRightRadius:10,
@@ -165,31 +178,31 @@ const OpenWorks = (props) => {
                   BildirimNo:
                 </Text>
                 <Text style={{fontWeight:"bold", fontSize:12, color:"white"}}>
-                  {OpenWorksDummyData2[i].BildirimNo}
+                  {openWorksAfterSearchData[i].QMNUM}
                 </Text>
                   <Text style={{fontSize:13, fontWeight:"bold" , color:"black"}}>Bildiren:</Text>
-                  <Text style={{fontSize:12, fontWeight:"bold", color:"white"}}>{OpenWorksDummyData2[i].Bildiren}</Text>
+                  <Text style={{fontSize:12, fontWeight:"bold", color:"white"}}>{openWorksAfterSearchData[i].QMNAM}</Text>
               </View>
               <View style={styles.ViewStyle2}>
                 <View style={{flexDirection:"row"}}>
                   <Text style={{fontSize:12, fontWeight:"bold"}}>Tenik Birim Tanımı: </Text>
-                  <Text style={{fontSize:12, fontWeight:"bold",color:"white"}}>{OpenWorksDummyData2[i].TeknikBirimTanimi}</Text>
+                  <Text style={{fontSize:12, fontWeight:"bold",color:"white"}}>{openWorksAfterSearchData[i].PLTXT}</Text>
                 </View>
                 <View style={{flexDirection:"row"}}>
                   <Text style={{fontSize:12, fontWeight:"bold"}}>Arıza Kodu: </Text>
-                  <Text style={{fontSize:12, fontWeight:"bold",color:"white"}}>{OpenWorksDummyData2[i].ArizaKodu} </Text>
+                  <Text style={{fontSize:12, fontWeight:"bold",color:"white"}}>{openWorksAfterSearchData[i].QMCOD} </Text>
                 </View>
                 <View style={{flexDirection:"row"}}>
                   <Text style={{fontSize:12, fontWeight:"bold"}}>Ekipman Tanımı: </Text>
-                  <Text style={{fontSize:12, fontWeight:"bold",color:"white"}}>{OpenWorksDummyData2[i].EkipmanTanimi} </Text>
+                  <Text style={{fontSize:12, fontWeight:"bold",color:"white"}}>{openWorksAfterSearchData[i].EQTXT} </Text>
                 </View>
                 <View style={{flexDirection:"row"}}>
                   <Text style={{fontSize:12, fontWeight:"bold"}}>Arıza Bildirim Açıklaması: </Text>
-                  <Text style={{fontSize:12, fontWeight:"bold",color:"white"}}>{OpenWorksDummyData2[i].ArizaKoduKisaAciklama}</Text>
+                  <Text style={{fontSize:12, fontWeight:"bold",color:"white"}}>{openWorksAfterSearchData[i].QMTXT}</Text>
                 </View>
                 <View style={{flexDirection:"row"}}>
                   <Text style={{fontSize:12, fontWeight:"bold"}}>Bildirim Tarihi: </Text>
-                  <Text style={{fontSize:12, fontWeight:"bold",color:"white"}}>{OpenWorksDummyData2[i].ArizaBaslangic}</Text>
+                  <Text style={{fontSize:12, fontWeight:"bold",color:"white"}}>{openWorksAfterSearchData[i].QMDAT.substring(0,4)+"-"+openWorksAfterSearchData[i].QMDAT.substring(4,6)+"-"+openWorksAfterSearchData[i].QMDAT.substring(6,8) +" "+openWorksAfterSearchData[i].MZEIT.substring(0,2)+":"+openWorksAfterSearchData[i].MZEIT.substring(2,4)+":"+openWorksAfterSearchData[i].MZEIT.substring(4,6)}</Text>
                 </View>
               </View>        
             </TouchableOpacity>
@@ -197,13 +210,13 @@ const OpenWorks = (props) => {
         );
       }
     }
-    return(
+      return(
       <View>
         <SearchBar
           style={{color:"black"}}
           containerStyle={{height:height/14,paddingTop:5,backgroundColor:"white"}}
           platform="android"
-          placeholder="Type Here..."
+          placeholder="Type Here" 
           onChangeText={(search) =>onSearch(search)}
           value={search}
         />
@@ -217,7 +230,7 @@ const OpenWorks = (props) => {
           }
         </ScrollView>
       </View>
-    );
+    );  
 }
 export default OpenWorks;
 const styles = StyleSheet.create({

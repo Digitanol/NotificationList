@@ -5,8 +5,8 @@ import { StatusBar } from "expo-status-bar";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const LoginScreen=({navigation}) => {
-    const [loginID, setloginID] = useState("xmyesil");
-    const [password, setPassword] = useState("My123456");
+    const [loginID, setloginID] = useState("XMBOZKIR");
+    const [password, setPassword] = useState("DigitANOL2019*");
    
     AsyncStorage.multiSet([
       ["loginID", loginID], ["password", password]
